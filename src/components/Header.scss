@@ -1,0 +1,148 @@
+// Header.scss
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 40px;
+  background-color: #fff;
+
+  .header-left {
+    .search-bar {
+      display: flex;
+      align-items: center;
+      background-color: #ffffff;
+      border-radius: 5px;
+      padding: 5px 10px;
+      box-shadow: 0 0 10px #FF9A4047;
+
+      input {
+        border: none;
+        background: none;
+        outline: none;
+        padding: 5px;
+        font-size: 16px;
+        color: #333;
+      }
+
+      .search-icon {
+        color: #000000e1;
+        font-size: 16px;
+      }
+    }
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+
+    .header-icon {
+      margin-left: 20px;
+      font-size: 20px;
+      cursor: pointer;
+      color: #000000e0;
+      transition: color 0.3s;
+
+      &:hover {
+        color: #FF9A40;
+      }
+    }
+
+    .notification::after {
+      content: attr(data-count);
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background-color: #f00;
+      color: #fff;
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 50%;
+      border: 1px solid #fff; /* Add border to make it more visible */
+      display: none;
+    }
+    
+    .notification.show-count::after {
+      display: block;
+    }
+  .notif-test{
+    position: absolute;
+    top: 10px;
+    right: 211px;
+    background-color: #f00;
+    color: #fff;
+    font-size: 12px;
+    padding: 4px 4px;
+    border-radius: 82%;
+  }      
+    
+
+    .admin {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      margin-left: 20px;
+      position: relative;
+
+      .admin-icon {
+        font-size: 24px;
+        color: #888;
+      }
+
+      .admin-name {
+        margin-left: 10px;
+        font-size: 16px;
+        color: #333;
+      }
+
+      .admin-role {
+        margin-left: 5px;
+        font-size: 14px;
+        color: #888;
+      }
+
+      .admin-menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        overflow: hidden;
+        margin-top: 10px;
+        z-index: 1000;
+
+        ul {
+          list-style: none;
+          margin: 0;
+          padding: 10px;
+
+          li {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+
+            &:hover {
+              background-color: #f0f0f0;
+            }
+
+            svg {
+              margin-right: 10px;
+              color: #888;
+            }
+
+            .badge {
+              margin-left: auto;
+              background-color: #FF9A40;
+              color: #fff;
+              font-size: 12px;
+              padding: 2px 5px;
+              border-radius: 12px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

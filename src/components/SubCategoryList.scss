@@ -1,0 +1,57 @@
+.sub-category-table-container {
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+}
+ 
+.sub-category-table {
+  width: 100%;
+  border-collapse: collapse;
+ 
+  th,
+  td {
+    padding: 20px 20px;
+    text-align: left;
+  }
+ 
+  th, .souscateg {
+    background-color: #FFF8F1;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: left;
+  }
+ 
+  tr:hover {
+    background-color: #f1f1f1;
+  }
+  td{
+    font-size: 15px;
+  }
+  table tr:nth-child(odd) {
+    background-color: #ffffffe6;
+  }
+  ul {
+    padding-left: 20px;
+    margin: 0;
+ 
+    li {
+      margin-bottom: 5px;
+      text-align: left;
+    }
+  }
+}
+.sub{
+  margin-bottom: 20px;
+  text-align: end;
+}
+ 
+.action{
+  text-align: end;
+  margin-top: -20px;
+}
+ 
+#titresouscateg tr th {
+    text-align: left;
+    font-weight: bold;
+    font-size: 16px;
+}

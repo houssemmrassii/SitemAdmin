@@ -1,0 +1,32 @@
+#exporter{
+    background-color: white;
+    color:#FF9A40;
+    border: 1px solid #FF9A40 ;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: none;
+  }
+
+  #exporter:hover {
+    background-color: #FF9A40;
+  color: white;
+  }
+
+  .icon-blocked {
+    color: red;
+  }
+  
+  .icon-unblocked {
+    color: #FF965A; /* Couleur orange */
+  }
+
+  svg{
+    font-size: 20px;
+  }
+  #tab{
+    table-layout: auto;
+
+  }
+
+  

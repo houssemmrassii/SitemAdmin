@@ -1,0 +1,136 @@
+
+  .status-success {
+    color: green;
+    background-color: #e8f5e9;
+    padding: 5px 10px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  .status-pending {
+    color: grey;
+    background-color: #eceff1;
+    padding: 5px 10px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  .status-inprogress {
+    color: #FF9A40;
+    background-color: #fff3e0;
+    padding: 5px 10px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  .status-cancel {
+    color: red;
+    background-color: #ffebee;
+    padding: 5px 10px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  .tracking-button {
+    background-color: #FFB673;
+    color: #FF9A40;
+    text-transform: none;
+    border-radius: 8px;
+    font-size: 14px;
+    padding: 5px 10px;
+    text-align: center;
+  }
+  
+  .tracking-button:hover {
+    background-color: #FF9A40;
+    color: white;
+  }
+  
+  .action-buttonS {
+    color:#FF9A40;
+  }
+  
+  .action-buttonS:hover {
+    color:#FF9A40;
+    background-color: #FF9A40;
+  }
+  
+  .delete-button {
+    color: red;
+  }
+  
+  .delete-button:hover {
+    color: darkred;
+  }
+  
+  .pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .pagination-button {
+    background-color: #FFB673;
+    color: #FF9A40;
+    margin: 0 5px;
+    border-radius: 8px;
+  }
+  
+  .pagination-button.active {
+    background-color: #FF9A40;
+    color: white;
+  }
+  
+  #exporter{
+    background-color: white;
+    color:#FF9A40;
+    border: 1px solid #FF9A40 ;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: none;
+  }
+
+  #exporter:hover {
+    background-color: #FF9A40;
+  color: white;
+  }
+  
+  table, th, td {
+    border: none;
+  }
+
+  .order-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 40px;
+    border: none;
+    table-layout: auto;
+  }
+  
+  .order-table th, .order-table td {
+    padding: 14px;
+    text-align: center;
+    font-size: 14px;
+  }
+  
+  .order-table th {
+    font-size: 13px;
+    text-align: center;
+    background-color: #FBF3EE;
+    padding: 20px;
+  }
+  
+  label {
+    margin-bottom: 5px;
+    margin-top:10px ;
+    font-weight: 500;
+    font-size: 12px;
+  }
+  .form-row{
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  .order-table tr:nth-child(odd) {
+    background-color: #f9f9f9;
+  }

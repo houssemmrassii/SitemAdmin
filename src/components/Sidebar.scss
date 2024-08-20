@@ -1,0 +1,128 @@
+// Sidebar.scss
+.sidebar {
+  width: 250px;
+  background-color: #FFF8F1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transition: width 0.3s ease;
+
+  &.collapsed {
+    width: 80px;
+
+    .sidebar-header {
+      .collapse-button {
+        left: 60px;
+      }
+    }
+
+    .sidebar-menu ul li .menu-item span,
+    .sidebar-menu ul li a span {
+      display: none;
+    }
+
+    .submenu {
+      padding-left: 0;
+    }
+  }
+
+  .sidebar-header {
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    .logo {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .collapse-button {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+    }
+  }
+
+  .sidebar-menu {
+    flex-grow: 1;
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        .menu-item,
+        a {
+          display: flex;
+          align-items: center;
+          padding: 23px 40px;
+          font-size: 16px;
+          color: #333;
+          text-decoration: none;
+          transition: background-color 0.3s, color 0.3s;
+          font-weight: 700;
+
+          &:hover {
+            background-color: #fffffffa;
+            border-radius: 8px;
+          }
+
+          &.active {
+            background-color: #ffffff;
+            color: #FF9A40;
+            border-radius: 8px;
+            margin-left: 30px;
+            box-shadow: 0 0 10px #FF9A4047;
+            padding: 16px 16px;
+          }
+
+          .icon {
+            margin-right: 10px;
+          }
+        }
+
+        .submenu {
+          padding-left: 20px;
+          li {
+            padding: 5px 0;
+            a {
+              font-size: 14px;
+              &:hover {
+                color: #FF9A40;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+
+  .sidebar-footer {
+    padding: 20px;
+    text-align: center;
+    .help {
+      p {
+        margin: 10px 0;
+      }
+      button {
+        background-color: #FF9A40;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        &:hover {
+          background-color: #FF9A40;
+        }
+      }
+    }
+  }
+}

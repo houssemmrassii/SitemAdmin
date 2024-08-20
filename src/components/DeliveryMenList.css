@@ -1,0 +1,150 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #ffffff;
+  margin: 0;
+  padding: 0;
+  color: #333;
+  margin-top: 40px;
+}
+
+.search-export-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.form-search {
+  display: flex;
+  align-items: center;
+}
+
+.name {
+  margin: 0;
+}
+
+.search-input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  width: 250px;
+  outline: none;
+  font-size: 14px;
+}
+
+.button-submit .search-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.export-button {
+  background-color: #FF9A40;
+  color: white;
+  text-transform: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+}
+
+.export-button:hover {
+  background-color: #FF9A40;
+}
+
+table, th, td {
+  border: none;
+}
+
+.delivery-men-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 40px;
+  border: none;
+
+}
+
+.delivery-men-table th, .delivery-men-table td {
+  padding: 14px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.delivery-men-table th {
+  font-size: 13px;
+  text-align: center;
+  background-color: #FBF3EE;
+  padding: 20px;
+}
+
+label {
+  margin-bottom: 5px;
+  margin-top:10px ;
+  font-weight: 500;
+  font-size: 12px;
+}
+.form-row{
+  flex-wrap: wrap;
+  width: 100%;
+}
+.delivery-men-table table td:nth-child(2),
+.delivery-men-table table th:nth-child(2) {
+  text-align: center;
+}
+
+.action-button {
+  color: #FF9A40;
+}
+
+.action-button:hover {
+  color: #FF9A40
+}
+
+.delete-button {
+  color: #FF4040;
+}
+
+.delete-button:hover {
+  color: #CC3030;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination-button {
+  background-color: #e3f2fd;
+  color: #FF9A40;
+  margin: 0 5px;
+  border-radius: 8px;
+}
+
+.pagination-button.active {
+  background-color: #FF9A40;
+  color: white;
+}
+#exporter{
+  background-color: white;
+  color:#FF9A40;
+  border: 1px solid #FF9A40 ;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#exporter:hover {
+  background-color: #FF9A40;
+color: white;
+}
+
+.add-buttons button{
+  margin-right: 10px;
+}
+
+
+

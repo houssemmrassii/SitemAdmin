@@ -1,0 +1,15 @@
+// src/assets/scss/mixins.scss
+@mixin flex($align: center, $justify: space-between) {
+    display: flex;
+    align-items: $align;
+    justify-content: $justify;
+  }
+  
+  @mixin transition3 {
+    transition: all 0.3s ease;
+  }
+  
+  @mixin d-flex {
+    display: flex;
+  }
+  

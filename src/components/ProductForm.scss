@@ -1,0 +1,122 @@
+.product-form-container {
+  max-width: 800px;
+  margin: 50px auto;
+  padding-top: 50px;
+  font-family: "Inter", sans-serif;
+
+  h4 {
+    color: #333;
+    text-align: left;
+    font-size: 36px;
+    font-weight: 600;
+    margin-bottom: 30px;
+  }
+
+  .MuiFormControl-root {
+    margin-bottom: 30px;
+    padding: 0;
+    border: none;
+
+    .MuiInputBase-root {
+      input, .MuiSelect-root {
+        font-size: 16px;
+        color: #333;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 10px;
+        transition: border-color 0.3s ease, background-color 0.3s ease;
+
+        &:focus {
+          border-color: #FF9A40; // Orange border when focused
+          background-color: rgba(255, 154, 64, 0.1); // Very transparent orange background
+        }
+      }
+
+      &::before,
+      &::after {
+        display: none;
+      }
+    }
+
+    .MuiInputLabel-root {
+      color: #333;
+      font-size: 14px;
+      font-weight: 500;
+      transform: translate(0, -20px) scale(1);
+      background-color: white;
+      padding: 0 5px;
+      margin-top: -10px;
+    }
+  }
+
+  .MuiFormControl-root .MuiInputLabel-root,
+  .MuiTextField-root .MuiInputLabel-root {
+    margin-bottom: 5px;
+  }
+
+  .upload-photo {
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    .drop-area {
+      border: 2px dashed #FF9A40;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #f9f9f9;
+      }
+
+      .drop-text {
+        color: #FF9A40;
+        font-size: 16px;
+
+        .click-browse {
+          font-weight: 600;
+          cursor: pointer;
+        }
+      }
+    }
+
+    .photo-preview {
+      width: 100%;
+      max-height: 200px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+
+    Button {
+      background-color: white;
+      color: #FF9A40;
+      border: 1px solid #FF9A40;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 10px 20px;
+      transition: background-color 0.3s;
+      box-shadow: none;
+      margin-right: 10px;
+
+      &:hover {
+        background-color: #FF9A40;
+        color: white;
+      }
+    }
+  }
+
+  .error {
+    color: red;
+    margin-top: 10px;
+    text-align: center;
+  }
+}
