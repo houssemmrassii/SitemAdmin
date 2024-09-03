@@ -3,6 +3,7 @@ import { Container, Typography, TextField, Button, FormControlLabel, Switch } fr
 import { collection, addDoc, doc, updateDoc, getDoc } from 'firebase/firestore';
 import { db, storage } from '../firebaseConfig';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { getAuth, createUserWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import { useNavigate, useParams } from 'react-router-dom';
 import Dropzone from 'react-dropzone';
 import { ToastContainer, toast } from 'react-toastify';
@@ -10,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import './DeliveryManForm.scss';
 
 const RestaurantForm: React.FC = () => {
-  const { id } = useParams<{ id: string }>(); // Get the id from the URL
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
   const [address, setAddress] = useState('');
@@ -25,12 +26,15 @@ const RestaurantForm: React.FC = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [pricePerKm, setPricePerKm] = useState<number>(0);
   const [serviceAvailability, setServiceAvailability] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isEditing, setIsEditing] = useState(false);
 
+  const auth = getAuth();
+
   useEffect(() => {
     if (id) {
-      // If there's an ID, we're in edit mode, so fetch the existing restaurant data
       const fetchRestaurant = async () => {
         const docRef = doc(db, 'shopData', id);
         const docSnap = await getDoc(docRef);
@@ -48,6 +52,7 @@ const RestaurantForm: React.FC = () => {
           setPhoneNumber(data.phoneNumber);
           setPricePerKm(data.pricePerKm);
           setServiceAvailability(data.serviceAvailability);
+          setEmail(data.email);
           setIsEditing(true);
         } else {
           toast.error('Restaurant non trouvé');
@@ -65,7 +70,7 @@ const RestaurantForm: React.FC = () => {
       await uploadBytes(logoRef, logoFile);
       return await getDownloadURL(logoRef);
     }
-    return logoUrl; // If no new image is uploaded, use the existing URL
+    return logoUrl;
   };
 
   const validate = () => {
@@ -80,6 +85,8 @@ const RestaurantForm: React.FC = () => {
     if (!phoneNumber || !/^\d+$/.test(phoneNumber)) newErrors.phoneNumber = 'Le numéro de téléphone doit contenir uniquement des chiffres';
     if (pricePerKm <= 0) newErrors.pricePerKm = 'Le prix par km doit être supérieur à 0';
     if (!logoFile && !logoUrl) newErrors.logoPath = 'Le logo est requis';
+    if (!email || !/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) newErrors.email = 'Un email valide est requis';
+    if (!password || password.length < 6) newErrors.password = 'Le mot de passe doit contenir au moins 6 caractères';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -89,6 +96,9 @@ const RestaurantForm: React.FC = () => {
     if (!validate()) return;
 
     try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userId = userCredential.user.uid;
+
       const logoUrl = await handleImageUpload();
       const restaurantData = {
         name,
@@ -102,20 +112,23 @@ const RestaurantForm: React.FC = () => {
         phoneNumber,
         pricePerKm,
         serviceAvailability,
+        email,
+        userId,
       };
 
       if (isEditing && id) {
-        // Update existing restaurant
         const docRef = doc(db, 'shopData', id);
         await updateDoc(docRef, restaurantData);
         toast.success('Restaurant mis à jour avec succès !');
       } else {
-        // Add new restaurant
         await addDoc(collection(db, 'shopData'), restaurantData);
-        toast.success('Restaurant ajouté avec succès !');
+
+        // Send password reset email to the new restaurant owner
+        await sendPasswordResetEmail(auth, email);
+
+        toast.success('Restaurant ajouté avec succès et email de confirmation envoyé!');
       }
 
-      // Reset form
       setName('');
       setDescription('');
       setTag('');
@@ -128,7 +141,9 @@ const RestaurantForm: React.FC = () => {
       setPricePerKm(0);
       setServiceAvailability(false);
       setLogoUrl('');
-      
+      setEmail('');
+      setPassword('');
+
       navigate('/restaurants'); 
     } catch (error) {
       toast.error('Erreur lors de l\'ajout/mise à jour du restaurant');
@@ -155,7 +170,7 @@ const RestaurantForm: React.FC = () => {
         </div>
 
         <div className="form-group">
-          <label className="form-label">Description </label>
+          <label className="form-label">Description</label>
           <TextField
             fullWidth
             value={description}
@@ -164,6 +179,32 @@ const RestaurantForm: React.FC = () => {
             required
             error={!!errors.description}
             helperText={errors.description}
+          />
+        </div>
+        <div className="form-group">
+          <label className="form-label">Email</label>
+          <TextField
+            fullWidth
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            margin="normal"
+            required
+            error={!!errors.email}
+            helperText={errors.email}
+          />
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">Mot de passe</label>
+          <TextField
+            fullWidth
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            margin="normal"
+            required
+            type="password"
+            error={!!errors.password}
+            helperText={errors.password}
           />
         </div>
 
@@ -200,6 +241,7 @@ const RestaurantForm: React.FC = () => {
             label=""
           />
         </div>
+
         <div className="form-group">
           <label className="form-label">Heure d'ouverture</label>
           <TextField
@@ -212,14 +254,9 @@ const RestaurantForm: React.FC = () => {
             required
             error={!!errors.openTime}
             helperText={errors.openTime}
-            InputProps={{
-              classes: {
-                root: 'time-picker-input',
-                input: 'time-picker-input-field',
-              },
-            }}
           />
         </div>
+
         <div className="form-group">
           <label className="form-label">Heure de fermeture</label>
           <TextField
@@ -232,14 +269,9 @@ const RestaurantForm: React.FC = () => {
             required
             error={!!errors.closingTime}
             helperText={errors.closingTime}
-            InputProps={{
-              classes: {
-                root: 'time-picker-input',
-                input: 'time-picker-input-field',
-              },
-            }}
           />
         </div>
+
         <div className="form-group">
           <label className="form-label">Numéro de téléphone</label>
           <TextField
@@ -291,9 +323,9 @@ const RestaurantForm: React.FC = () => {
           </Dropzone>
           {errors.logoPath && <Typography color="error">{errors.logoPath}</Typography>}
         </div>
-        
+
         <Button id='exporter' type="submit" variant="contained" className="submit-button">
-          {isEditing ? 'Mettre à jour ' : 'Ajouter '}
+          {isEditing ? 'Mettre à jour' : 'Ajouter'}
         </Button>
       </form>
       <ToastContainer />

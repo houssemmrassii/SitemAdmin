@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState<string>(''); // Explicitly typing error state as string
+  const [error, setError] = useState<string>(''); 
   const [user, setUser] = useState<User | null>(null);
 
   const navigate = useNavigate();
@@ -20,31 +20,32 @@ const LoginPage: React.FC = () => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
+        navigate('/dashboard'); // Redirect to dashboard if already logged in
       } else {
         setUser(null);
       }
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [navigate]);
 
   const handleLogin = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
+    setError(''); // Clear any previous errors
 
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       console.log('User logged in successfully:', userCredential.user);
-      navigate('/dashboard'); // Redirect to home page on successful login
+      navigate('/dashboard'); // Redirect to the restaurant's dashboard
     } catch (error: any) {
-      setError(error.message || 'Failed to log in. Please try again.');
+      setError('Failed to log in. Please check your credentials and try again.');
     }
   };
 
   return (
     <div id="wrapper">
-      <div id="page" className="">
+      <div id="page">
         <div className="wrap-login-page">
-        
           <div className="flex-grow flex flex-column justify-center gap30">
             <a href="index.html" id="site-logo-inner"></a>
             <div className="login-box">
@@ -96,7 +97,7 @@ const LoginPage: React.FC = () => {
               </form>
               <div className="text-center">
                 <div className="text-tiny tf-color-2">
-                  Don't have an account? <a href="/signup" className="tf-color">Sign Up</a>
+                  If you don't have an account, please contact your administrator.
                 </div>
               </div>
             </div>

@@ -20,6 +20,11 @@ interface SubCategory {
   categoryId: string;
 }
 
+interface Restaurant {
+  id: string;
+  name: string;
+}
+
 interface Product {
   id: string;
   productName: string;
@@ -28,6 +33,7 @@ interface Product {
   productCategory: string;
   productSpecCategory: string;
   productImage: string;
+  restaurantId: string; // New field to store restaurant ID
   averageRating: number;
   reviews: any[];
   added_at: Date;
@@ -44,6 +50,8 @@ const ProductForm: React.FC = () => {
   const [photoURL, setPhotoURL] = useState<string | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [subCategories, setSubCategories] = useState<SubCategory[]>([]);
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const [selectedRestaurant, setSelectedRestaurant] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -66,6 +74,14 @@ const ProductForm: React.FC = () => {
       }));
       setSubCategories(subCategoryList);
 
+      // Fetch restaurants
+      const restaurantSnapshot = await getDocs(collection(db, 'shopData'));
+      const restaurantList: Restaurant[] = restaurantSnapshot.docs.map(doc => ({
+        id: doc.id,
+        name: doc.data().name,
+      }));
+      setRestaurants(restaurantList);
+
       if (productId) {
         const productDoc = await getDoc(doc(db, 'product', productId));
         if (productDoc.exists()) {
@@ -75,6 +91,7 @@ const ProductForm: React.FC = () => {
           setProductPrice(productData.productPrice);
           setCategory(productData.productCategory);
           setSubCategory(productData.productSpecCategory);
+          setSelectedRestaurant(productData.restaurantId);
           setPhotoURL(productData.productImage);
 
           if (!categoryList.some(cat => cat.id === productData.productCategory)) {
@@ -127,6 +144,11 @@ const ProductForm: React.FC = () => {
       return;
     }
 
+    if (!selectedRestaurant) {
+      setError('Le restaurant est obligatoire.');
+      return;
+    }
+
     if (!photo && !photoURL) {
       setError('L\'image du produit est obligatoire.');
       return;
@@ -148,6 +170,7 @@ const ProductForm: React.FC = () => {
         productCategory: category,
         productSpecCategory: subCategory,
         productImage: imageUrl,
+        restaurantId: selectedRestaurant, // Store the selected restaurant ID
         averageRating: 0,
         reviews: [],
         added_at: new Date(),
@@ -206,7 +229,7 @@ const ProductForm: React.FC = () => {
           />
         </FormControl>
         <FormControl fullWidth margin="normal">
-          <InputLabel shrink>Description </InputLabel>
+          <InputLabel shrink>Description</InputLabel>
           <TextField
             variant="outlined"
             fullWidth
@@ -230,8 +253,8 @@ const ProductForm: React.FC = () => {
             }}
           />
         </FormControl>
-        <FormControl fullWidth margin="normal"> 
-          <InputLabel shrink>Prix </InputLabel>
+        <FormControl fullWidth margin="normal">
+          <InputLabel shrink>Prix</InputLabel>
           <TextField
             type="number"
             variant="outlined"
@@ -242,22 +265,22 @@ const ProductForm: React.FC = () => {
             error={!!error && (!productPrice || productPrice <= 0)}
             helperText={!!error && (!productPrice || productPrice <= 0) && 'Le prix du produit doit être supérieur à 0.'}
             InputProps={{
-            endAdornment: <InputAdornment position="end">€</InputAdornment>, 
-          }}
-          sx={{
-          '& .MuiOutlinedInput-root': {
-          '&.Mui-focused fieldset': {
-            borderColor: '#FF9A40',
-          },
-          },
-          '& .MuiOutlinedInput-input': {
-          backgroundColor: 'rgba(255, 154, 64, 0.05)',
-          },
-          '& .MuiInputLabel-root': {
-          paddingBottom: '5px',
-          },
-         }}
-        />
+              endAdornment: <InputAdornment position="end">€</InputAdornment>,
+            }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                '&.Mui-focused fieldset': {
+                  borderColor: '#FF9A40',
+                },
+              },
+              '& .MuiOutlinedInput-input': {
+                backgroundColor: 'rgba(255, 154, 64, 0.05)',
+              },
+              '& .MuiInputLabel-root': {
+                paddingBottom: '5px',
+              },
+            }}
+          />
         </FormControl>
         <FormControl fullWidth margin="normal">
           <InputLabel shrink>Catégorie</InputLabel>
@@ -298,6 +321,28 @@ const ProductForm: React.FC = () => {
                 <MenuItem key={subCat.id} value={subCat.id}>{subCat.name}</MenuItem>
               ))
             }
+          </Select>
+        </FormControl>
+        <FormControl fullWidth margin="normal">
+          <InputLabel shrink>Restaurant</InputLabel>
+          <Select
+            value={selectedRestaurant}
+            onChange={(e) => setSelectedRestaurant(e.target.value as string)}
+            sx={{
+              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                borderColor: '#FF9A40',
+              },
+              '& .MuiOutlinedInput-input': {
+                backgroundColor: 'rgba(255, 154, 64, 0.05)',
+              },
+              '& .MuiInputLabel-root': {
+                paddingBottom: '5px',
+              },
+            }}
+          >
+            {restaurants.map(restaurant => (
+              <MenuItem key={restaurant.id} value={restaurant.id}>{restaurant.name}</MenuItem>
+            ))}
           </Select>
         </FormControl>
         <div className="upload-photo">

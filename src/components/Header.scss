@@ -2,239 +2,108 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 40px;
-    background-color: #fff;
-   
-    .header-left {
-        display: flex;
-        align-items: center;
-   
-        .search-bar {
-            display: flex;
-            align-items: center;
-            background-color: #ffffff;
-            border-radius: 5px;
-            padding: 5px 10px;
-            box-shadow: 0 0 10px #FF9A4047;
-            transition: width 0.3s ease;
-   
-            input {
-                border: none;
-                background: none;
-                outline: none;
-                padding: 5px;
-                font-size: 16px;
-                color: #333;
-                width: 200px;
-            }
-   
-            .search-icon {
-                color: #000000e1;
-                font-size: 16px;
-                cursor: pointer;
-            }
-        }
-   
-        .search-icon.only {
-            font-size: 20px;
-            cursor: pointer;
-            color: #000000e0;
-        }
-    }
-   
-    .header-right {
-        display: flex;
-        align-items: center;
-   
-        .header-icon {
-            font-size: 20px;
-            cursor: pointer;
-            color: #000000e0;
-            transition: color 0.3s;
-   
-            &:hover {
-              font-weight: 500;
-              background-color: white;
-              color: #FF9A40;
-            }
-        }
-   
-        .notif-test {
-            position: relative;
-            top: -10px;
-            right: 5px;
-            background-color:#FF9A40;
-            color: #fff;
-            font-size: 12px;
-            padding: 4px 4px;
-            border-radius: 50%;
-            border: 1px solid #FF9A40;
-        }
-        .admin {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            margin-left: 20px;
-            position: relative;
-   
-            .admin-icon {
-                font-size: 24px;
-                color: #888;
-            }
-   
-            .admin-name {
-                margin-left: 10px;
-                font-size: 16px;
-                color: #333;
-            }
-   
-            .admin-role {
-                margin-left: 5px;
-                font-size: 14px;
-                color: #888;
-            }
-   
-            .admin-menu {
-              position: absolute;
-              top: 100%; /* Position the menu just below the admin div */
-              left: 0;
-              background-color: white;
-              box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-              border-radius: 8px;
-              width: 150px;
-              z-index: 10;
-              padding: 10px 0;
-   
-                ul {
-                  list-style-type: none;
-                  padding: 0;
-                  margin: 0;
-   
-                    li {
-                      padding: 10px;
-                      display: flex;
-                      align-items: center;
-                      cursor: pointer;
-   
-                        &:hover {
-                            background-color: #f0f0f0;
-                        }
-   
-                        svg {
-                            margin-right: 10px;
-                            color: #888;
-                        }
-   
-                        .badge {
-                            margin-left: auto;
-                            background-color: #FF9A40;
-                            color: #fff;
-                            font-size: 12px;
-                            padding: 2px 5px;
-                            border-radius: 12px;
-                        }
-                    }
-                }
-                .admin-menu.open {
-                  max-height: 200px; /* Ajustez selon la hauteur de votre contenu */
-                  opacity: 1;
-              }
-            }
-        }
-    }
-   
-    .dropdown-menu {
-      display: flex;
-      flex-direction: column;
-      position: absolute;
-      background-color:#FFF8F1;
-      top: 70%;
-      left: 980px;
-      min-width: 110px;
-      border: 1px solid #ddd;
-      z-index: 1;
-      border-radius: 8px;
-    }
-   
-    .dropdown-menu a {
-      padding: 12px 16px;
-      text-decoration: none;
-      color: #333;
-      display: block;
-      font-weight: 500;
-    }
-   
-    .dropdown-menu a:hover {
-      background-color: #f1f1f1;
-      color: #FF9A40;
-    }
-   
-    @media (max-width: 768px) {
-        padding: 10px 20px;
-   
-        .header-left {
-            .search-bar {
-                width: 100%;
-                max-width: 300px;
-                margin-right: 20px;
-   
-                input {
-                    width: 100%;
-                    font-size: 14px;
-                }
-            }
-        }
-        .header-right {
-            justify-content: flex-end;
-            flex: 1;
-   
-            .header-icon {
-                margin-left: 10px;
-            }
-   
-            .admin {
-                .admin-icon {
-                    font-size: 22px;
-                }
-                .admin-name {
-                    font-size: 14px;
-                }
-                .admin-role {
-                    font-size: 12px;
-                }
-            }
-        }
-    }
-   
-    @media (max-width: 480px) {
-        flex-wrap: nowrap;
-        padding: 10px;
-   
-        .header-left {
-            .search-bar {
-                max-width: 200px; /* Réduire la largeur de la barre de recherche */
-            }
-   
-            .search-icon.only {
-                display: block;
-            }
-        }
-   
-        .header-right {
-            .header-icon {
-                margin-left: 10px;
-                font-size: 16px;
-            }
-   
-            .admin {
-                .admin-icon {
-                    font-size: 20px;
-                }
-   
-                .admin-name {
-                    font-size: 12px;
-                }
-            }
-        }
-    }
-  }
+    padding: 10px 20px;
+    background-color: #f8f9fa;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.search-icon {
+    cursor: pointer;
+    margin-right: 15px;
+    transition: color 0.3s;
+}
+
+.search-icon.only {
+    font-size: 1.2em;
+}
+
+.search-icon:hover {
+    color: #ff9a40;
+}
+
+.header-icon {
+    position: relative;
+    cursor: pointer;
+    margin-left: 20px;
+    transition: color 0.3s;
+}
+
+.header-icon:hover {
+    color: #ff9a40;
+}
+
+.notification-wrapper {
+    position: relative;
+}
+
+.notif-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #ff4b5c;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+    line-height: 1;
+}
+
+.profile-dropdown {
+    position: relative;
+}
+
+.profile-link {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    z-index: 10;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+}
+
+.profile-dropdown:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.dropdown-item:hover {
+    background-color: #f1f1f1;
+    color: #ff9a40;
+}
+
+.dropdown-icon {
+    margin-right: 10px;
+}
