@@ -6,7 +6,9 @@ import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 import './ProductList.scss';
 import { FaEye } from 'react-icons/fa';
-
+import { query, orderBy } from 'firebase/firestore';
+import MyModalconf from './MyModalconf';  // Make sure to import your modal component
+ 
 interface Product {
   id: string;
   productName: string;
@@ -14,18 +16,18 @@ interface Product {
   productSpecCategory: string;
   productImage: string;
 }
-
+ 
 interface Category {
   id: string;
   name: string;
 }
-
+ 
 interface SubCategory {
   id: string;
   name: string;
   categoryId: string;
 }
-
+ 
 const ProductList: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
@@ -35,30 +37,34 @@ const ProductList: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [showModalconf, setShowModalconf] = useState<boolean>(false);
+  const [productToDelete, setProductToDelete] = useState<string | null>(null);
+ 
   const itemsPerPage = 10;
   const navigate = useNavigate();
-
+ 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const categorySnapshot = await getDocs(collection(db, 'category'));
         const subCategorySnapshot = await getDocs(collection(db, 'subcategory'));
-
+ 
         const categoryList: Category[] = categorySnapshot.docs.map(doc => ({
           id: doc.id,
           name: doc.data().name,
         }));
-
+ 
         const subCategoryList: SubCategory[] = subCategorySnapshot.docs.map(doc => ({
           id: doc.id,
           name: doc.data().name,
           categoryId: doc.data().categoryId,
         }));
-
+ 
         setCategories(categoryList);
         setSubCategories(subCategoryList);
-
-        const productSnapshot = await getDocs(collection(db, 'product'));
+ 
+        const productQuery = query(collection(db, 'product'), orderBy('added_at', 'desc'));
+        const productSnapshot = await getDocs(productQuery);
         const productList: Product[] = productSnapshot.docs.map(doc => {
           const data = doc.data();
           return {
@@ -69,7 +75,7 @@ const ProductList: React.FC = () => {
             productImage: data.productImage,
           };
         });
-
+ 
         setProducts(productList);
         setFilteredProducts(productList);
       } catch (error) {
@@ -79,52 +85,63 @@ const ProductList: React.FC = () => {
         setLoading(false);
       }
     };
-
+ 
     fetchProducts();
   }, []);
-
+ 
   useEffect(() => {
     setFilteredProducts(
       products.filter(product =>
         searchTerm === '' || product.productName.toLowerCase().includes(searchTerm.toLowerCase())
       )
     );
-    setCurrentPage(1); 
+    setCurrentPage(1);
   }, [searchTerm, products]);
-
+ 
   const indexOfLastProduct = currentPage * itemsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - itemsPerPage;
   const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
-
+ 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
-  const handleDelete = async (productId: string) => {
-    const confirmation = window.confirm("Êtes-vous sûr de vouloir supprimer ce produit ?");
-    if (confirmation) {
+ 
+  const handleDelete = (productId: string) => {
+    setProductToDelete(productId);
+    setShowModalconf(true);  // Show the confirmation modal
+  };
+ 
+  const handleConfirmDelete = async () => {
+    if (productToDelete) {
       try {
-        await deleteDoc(doc(db, 'product', productId));
-        setProducts(products.filter(product => product.id !== productId));
-        setFilteredProducts(filteredProducts.filter(product => product.id !== productId));
+        await deleteDoc(doc(db, 'product', productToDelete));
+        setProducts(products.filter(product => product.id !== productToDelete));
+        setFilteredProducts(filteredProducts.filter(product => product.id !== productToDelete));
       } catch (error) {
         setError('Échec de la suppression du produit');
+      } finally {
+        setShowModalconf(false);
+        setProductToDelete(null);  // Clear the product to delete
       }
     }
   };
-
+ 
+  const handleCancelDelete = () => {
+    setShowModalconf(false);
+    setProductToDelete(null);  // Clear the product to delete
+  };
+ 
   const handleUpdate = (productId: string) => {
     navigate(`/products/${productId}`);
   };
-
+ 
   const getCategoryName = (categoryId: string) => {
     const category = categories.find(cat => cat.id === categoryId);
     return category ? category.name : 'Inconnu';
   };
-
+ 
   const getSubCategoryName = (subCategoryId: string) => {
     const subCategory = subCategories.find(sub => sub.id === subCategoryId);
     return subCategory ? subCategory.name : 'Inconnu';
   };
-
   const renderPagination = () => {
     const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
     const paginationItems = [];
@@ -138,7 +155,7 @@ const ProductList: React.FC = () => {
         1
       </IconButton>
     );
-
+ 
     if (currentPage > 3) {
       paginationItems.push(<span key="start-ellipsis">...</span>);
     }
@@ -169,19 +186,19 @@ const ProductList: React.FC = () => {
     }
     return paginationItems;
   };
-
+ 
   if (loading) {
     return <Typography>Chargement...</Typography>;
   }
-
+ 
   if (error) {
     return <Typography color="error">{error}</Typography>;
   }
-
+ 
   const handleViewDetails = (productId: string) => {
     navigate(`/ReviewsList/${productId}`);
   };
-  
+ 
   return (
     <Container className="product-list-container">
       <Typography variant="h4" gutterBottom>
@@ -204,7 +221,7 @@ const ProductList: React.FC = () => {
               <i className="icon-search"></i>
             </button>
           </div>
-        </form>     
+        </form>    
         <div className="add-buttons">
         <Tooltip className='custom-tooltip' title="Voir la liste des catégories" arrow>
         <Button
@@ -244,21 +261,21 @@ const ProductList: React.FC = () => {
               <TableCell className="custom-table-cell-cellule" sx={{
                 fontSize: {
                   sm:'16px',
-                  md: '16px', 
+                  md: '16px',
                 },
                 textAlign: 'center',
               }}>{product.productName}</TableCell>
               <TableCell className="custom-table-cell-cellule" sx={{
-                fontSize: { 
+                fontSize: {
                   sm:'16px',
-                  md: '16px', 
+                  md: '16px',
                 },
                 textAlign: 'center',
               }}>{getCategoryName(product.productCategory)}</TableCell>
               <TableCell className="custom-table-cell-cellule" sx={{
                 fontSize: {
                   sm:'16px',
-                  md: '16px', 
+                  md: '16px',
                 },
                 textAlign: 'center',
               }}>{getSubCategoryName(product.productSpecCategory)}</TableCell>
@@ -269,9 +286,9 @@ const ProductList: React.FC = () => {
                 <IconButton className="action-button delete-button" onClick={() => handleDelete(product.id)}>
                   <Delete />
                 </IconButton>
-                <div 
-                  className="view-details-icon" 
-                  onClick={() => handleViewDetails(product.id)} 
+                <div
+                  className="view-details-icon"
+                  onClick={() => handleViewDetails(product.id)}
                   style={{ color:'#8c8f8f', textAlign: 'center' , cursor:'pointer' , display:'inline-block'}} >
                     <FaEye />
                 </div>
@@ -298,8 +315,14 @@ const ProductList: React.FC = () => {
           &gt;
         </IconButton>
       </div>
+      <MyModalconf
+        showconf={showModalconf}
+        handleCloseconf={handleCancelDelete}
+        handleConfirmconf={handleConfirmDelete}
+      />
+     
     </Container>
   );
 };
-
+ 
 export default ProductList;

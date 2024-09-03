@@ -75,6 +75,11 @@ const Header: React.FC = () => {
     const toggleSearchBar = () => {
         setIsSearchOpen(!isSearchOpen);
     };
+    const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+ 
+    const toggleProfileDropdown = () => {
+        setIsProfileDropdownOpen(!isProfileDropdownOpen);
+      };
  
     return (
         <header className="header">
@@ -96,21 +101,19 @@ const Header: React.FC = () => {
                 {unviewedCount > 0 && (
                     <div className='header-icon notif-test'>{unviewedCount}</div>
                 )}
-                <div className="admin" onClick={toggleAdminMenu}>
+                <div className="profile-dropdown" onClick={toggleProfileDropdown}>
+                <div className="profile-link">
                     <FaUserCircle className="header-icon admin-icon" />
-                    <span className="admin-name">{userName ? userName : ''}</span> 
+                    <span className="admin-name">{userName ? userName : ''}</span>
                     <span className="admin-role"></span>
                 </div>
-                {isAdminMenuOpen && (
-                    <div className="admin-menu">
-                        <ul>
-                            <li><FaUserCircle /> Compte</li>
-                            <li><FaEnvelope /> Boîte de Réception <span className="badge">27</span></li>
-                            <li><FaCog /> Paramètres</li>
-                            <li><FaSignOutAlt /> Déconnexion</li>
-                        </ul>
-                    </div>
+                {isProfileDropdownOpen && (
+               <div className="dropdown-menu">
+               <a href='#'><li><FaUserCircle /> Compte</li></a>
+               <a href='#'><li><FaSignOutAlt /> Déconnexion</li></a>
+             </div>
                 )}
+              </div>
             </div>
         </header>
     );
