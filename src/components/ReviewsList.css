@@ -1,0 +1,361 @@
+
+.product-container1 {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .left-section {
+    display: flex;
+  }
+  
+  .product-image-details {
+    width: 60px; 
+    height: auto;
+    border-radius: 8px;
+    margin-right: 15px;
+  }
+  
+  .product-name {
+    font-size: 22px; 
+    margin: 0;
+  }
+  
+  .right-section {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-grow: 1;
+  } 
+  .stars {
+    display: flex;
+  }
+  
+  .product-info-reviews {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .product-details-container{
+    background-color: #FDFAF8;
+    border-radius: 8px;
+    margin-top: 20px;
+  }
+  
+  .product-image-details {
+    width: 20%;
+    height: auto;
+    transition: transform 0.4s ease;
+    margin-left: 20px;
+  }
+  
+  .product-image-details:hover {
+    transform: scale(1.1);
+  }
+  .reviews h2{
+    color: #ff9940ac;
+  }
+  
+  .product-details h1 {
+    color: #333;
+    font-size: 3.5em;
+    font-weight: bold;
+    font-family: 'Arial', sans-serif;
+    margin-bottom: -15px;
+  }
+  
+  .desc{
+    margin-top: 30px;
+  text-align: justify;
+  font-size: 1.5rem;
+  }
+  .product-rating {
+    font-size: 1em;
+    color: #FF9A40;
+    margin-top: 15px;
+    text-align: center;
+  }
+  #firststar{
+    margin-bottom: -35px;
+    cursor:auto;
+  }
+  .stars {
+    display: flex;
+    align-items: center;
+    font-size: 35px;
+    color: #ddd;
+    cursor: pointer;
+   
+  }
+  .stars1 {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    color: #ddd;
+    justify-content: end;
+  }
+  
+  .star {
+    margin-right: 5px;
+  }
+  
+  .star.filled {
+    color: gold;
+  }
+  
+  .review-stars .star {
+    cursor: pointer;
+    font-size: 40px;
+    color: #ddd;
+    transition: color 0.2s;
+  }
+  
+  .review-stars .star.selected,
+  .review-stars .star:hover {
+    color: gold;
+  }
+  
+  .review-form-group {
+    margin-bottom: 15px;
+  }
+  
+  .review-form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 2em;
+    color: #333;
+  }
+  
+  .review-form-group textarea {
+    width: 100%;
+    padding: 8px;
+    font-size: 2em;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    resize: vertical;
+  }
+  .reply-form textarea:focus {
+    border-color: #FF9A40; 
+    outline: none;
+    
+  }
+  button[type="submit"] {
+    background-color: #FF9A40;
+    color: #fff;
+    padding: 12px 20px;
+    font-size: 2em;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #ff9940ac;
+  }
+  
+  .reviews {
+    margin-top: 30px;
+  }
+  
+  .review {
+    padding: 10px;
+  }
+  
+  .review p {
+    margin: 8px 13px;
+  }
+  
+  .reply {
+    margin-left: 20px;
+    padding: 10px;
+    background-color: #FFF8F1;
+    border-left: 2px solid #ddd;
+    margin-top: 5px;
+  }
+  
+  .reply-form {
+    margin-top: 10px;
+  }
+  
+  .reply-form textarea {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 5px;
+  }
+  
+  .reply-form button {
+    font-size: 12px;
+    padding: 5px 10px;
+    background-color: #ffffff;
+    color: #ff9a40;
+    border: 0.5px solid #ff9a40;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-weight: 600;
+      transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  .reply-form button :hover {
+    background-color: #FF9A40;
+  }
+  
+  @media (max-width: 768px) {
+    .product-info-reviews {
+      flex-direction: column;
+    }
+  
+    .product-details h1 {
+      font-size: 2.3em;
+    }
+  
+    .product-details p {
+      font-size: 1.5em;
+    }
+  
+    .product-image-details {
+      max-width: 100%;
+    }
+  
+    .stars, .review-stars .star {
+      font-size: 30px;
+    }
+  
+    .review-form-group label {
+      font-size: 1em;
+    }
+  
+    .review-form-group textarea {
+      font-size: 0.9em;
+    }
+  
+    button[type="submit"] {
+      font-size: 0.9em;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .product-details p {
+      font-size: 0.9em;
+    }
+  
+    .product-details .px {
+      font-size: 1.2em;
+    }
+  
+    .product-rating {
+      font-size: 0.9em;
+    }
+  
+    .stars, .review-stars .star {
+      font-size: 20px;
+    }
+  
+    .review-form-group label {
+      font-size: 0.9em;
+    }
+  
+    .review-form-group textarea {
+      font-size: 0.8em;
+    }
+  
+    button[type="submit"] {
+      font-size: 0.8em;
+    }
+  } 
+
+  .content {
+    padding: 20px;
+    border-radius: 5px;
+  }
+  
+ .reviews-section {
+    margin-bottom: 20px;
+    text-align: justify;
+  }
+  
+  .starsR {
+    display: flex;
+    margin-left: 10px;
+  }
+  
+  .starXdate{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .starR {
+    font-size: 22px;
+    cursor: pointer;
+    color: #ccc;
+  }
+  .starR.filled {
+    color: gold;
+  }
+  .review-date {
+    font-size: 13px;
+    color: gray;
+  }
+  .review {
+    margin-bottom: 15px;
+  }
+  
+  .reply-form {
+    margin-top: 10px;
+  }
+  
+  .reply-form textarea {
+    width: 100%;
+    height: 60px;
+  }
+  
+  .new-review textarea {
+    width: 100%;
+    height: 80px;
+  }
+  
+  .envoyer{
+    font-size: 12px;
+    padding: 5px 10px;
+    background-color: #ffffff;
+    color: #ff9a40;
+    border: 0.5px solid #ff9a40;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.3s, transform 0.2s;
+      margin-top: 10px;
+  }
+  .envoyer button :hover {
+    background-color: #FF9A40;
+    color: white;
+    transform: scale(1.1);
+  }
+  
+  @media screen and (max-width: 768px) {
+    .product-content {
+      flex-direction: column;
+    }
+  
+    .product-container1, .product-details {
+      flex: 1 1 100%;
+    }
+  
+    .product-image-details {
+      width: 80%;
+      margin-bottom: 20px;
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    .product-content {
+      padding: 10px;
+    }
+  
+    .product-image-details {
+      width: 100%;
+    }
+
+  }

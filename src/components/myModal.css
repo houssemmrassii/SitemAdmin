@@ -1,0 +1,74 @@
+/*body {
+    margin: 0;
+    font-family: 'DM Sans', sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }*/
+  .modal-out{
+        width: 610px;
+        background: #FFFFFF;
+        border-radius: 30px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        text-align: center;
+        height: auto;
+        /*position: relative;*/
+  }
+  
+  .modal-custom .modal-dialog {
+    max-width: 610px;
+  }
+  
+  .custom-contenu {
+    background: #FFFFFF;
+    border-radius: 30px;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .modalimg {
+    width: 200px;
+    height: 160px;
+    margin: 0 auto;
+  }
+  
+  #title {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    color: #000000;
+    margin: 20px 0;
+  }
+  
+  .body-modal {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: #A7A7A7;
+    margin-bottom: 30px;
+  }
+  
+  .modal-footer {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .action-button {
+    font-weight: 700;
+    font-size: 18px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    color: #FF9A40;
+  }
+  
+  .confirm-button {
+    padding: 15px 30px;
+    background: #FF9A40;
+    color: #FFFFFF;
+    border-radius: 42px;
+  }
+  

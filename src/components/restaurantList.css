@@ -1,0 +1,168 @@
+.search-button-container-restau{
+    display: flex;
+    justify-content: flex-end;
+}
+.restaurant-container {
+  font: inherit;
+  font-style: inherit;
+  font-weight: inherit;
+  font-family: "Inter", sans-serif;
+}
+  @media (max-width: 768px) {
+    .restaurant-container{
+      max-width: 400px;
+  }
+}
+
+.add-buttons{
+  display: flex;
+  justify-content: flex-end;
+}
+  
+  .buttons-container {
+    display: flex;
+    gap: 10px;
+  }
+
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; 
+}
+
+.table-container table {
+    width: 100%; 
+    min-width: 800px; 
+    border-collapse: collapse;
+}
+  
+  @media (max-width: 768px) {
+    .container{
+      max-width: 400px;
+    }
+    .restaurant-container{
+      max-width: 400px;
+    }
+    .buttons-container {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .table-container {
+      padding-bottom: 1rem;
+      overflow-x: scroll;
+      margin-top: 10px
+  }
+
+  .table-container table {
+      width: auto; 
+  }
+  }
+  
+  @media (max-width: 480px) {
+    .restaurant-container{
+      max-width: 400px;
+    }
+    .buttons-container {
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      width: 100%;
+    }
+    .add-buttons {
+      width: 100%;
+      justify-content: space-between;
+      padding: 8px 16px;
+      font-size: 10px;
+    }
+    #exporter{
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 8px 16px;
+      transition: background-color 0.3s;
+    }
+  }
+  
+.restau table tr:nth-child(row) {
+    background-color: rgb(196, 194, 194);
+}
+
+
+@media (max-width: 768px) {
+  .restaurant-container{
+    max-width: 400px;
+  }
+  .restaurant-list-container {
+    max-width: 400px;
+  }
+    .search-button-container-restau {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .buttons-container {
+        display: flex;
+        justify-content: flex-end;
+    }
+    .add-buttons {
+      width: 100%;
+      justify-content: space-between;
+      justify-content: center;
+    }
+  
+    .delivery-men-table th,
+    .delivery-men-table td {
+      padding: 8px;
+      font-size: 14px;
+    }
+  
+    .restaurant-logo {
+      max-width: 60px;
+    }
+  
+    .pagination-container {
+      align-items: center;
+    }
+  
+    .pagination-button {
+      margin: 4px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .restaurant-container{
+      max-width: 400px;
+    }
+    .restaurant-list-container {
+      padding: 8px;
+      max-width: 400px;
+    }
+    .add-buttons {
+      width: 100%;
+      justify-content: space-between;
+      padding: 8px 16px;
+      font-size: 10px;
+    }
+  
+    .delivery-men-table th, 
+    .delivery-men-table td {
+      font-size: 12px;
+      padding: 6px;
+    }
+  
+    .restaurant-logo {
+      max-width: 50px;
+    }
+    .add-buttons {
+      width: 100%;
+      justify-content: space-between;
+      padding: 8px 16px;
+      font-size: 10px;
+    }
+    #exporter{
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 8px 16px;
+      transition: background-color 0.3s;
+    }
+  }
