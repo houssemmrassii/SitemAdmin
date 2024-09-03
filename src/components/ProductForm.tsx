@@ -5,6 +5,7 @@ import { collection, addDoc, updateDoc, doc, getDoc, getDocs } from 'firebase/fi
 import { db, storage } from '../firebaseConfig';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { ToastContainer, toast } from 'react-toastify';
+import InputAdornment from '@mui/material/InputAdornment';
 import 'react-toastify/dist/ReactToastify.css';
 import './ProductForm.scss';
 
@@ -65,7 +66,6 @@ const ProductForm: React.FC = () => {
       }));
       setSubCategories(subCategoryList);
 
-      // Fetch product data if editing
       if (productId) {
         const productDoc = await getDoc(doc(db, 'product', productId));
         if (productDoc.exists()) {
@@ -77,7 +77,6 @@ const ProductForm: React.FC = () => {
           setSubCategory(productData.productSpecCategory);
           setPhotoURL(productData.productImage);
 
-          // Validate category and subcategory
           if (!categoryList.some(cat => cat.id === productData.productCategory)) {
             setCategory('');
           }
@@ -180,12 +179,9 @@ const ProductForm: React.FC = () => {
   return (
     <Container className="product-form-container">
       <ToastContainer />
-      <Typography variant="h4" gutterBottom>
-        {productId ? 'Modifier le Produit' : 'Ajouter le Produit'}
-      </Typography>
       <form onSubmit={handleSubmit}>
         <FormControl fullWidth margin="normal">
-          <InputLabel shrink>Nom du Produit</InputLabel>
+          <InputLabel shrink>Nom</InputLabel>
           <TextField
             variant="outlined"
             fullWidth
@@ -210,7 +206,7 @@ const ProductForm: React.FC = () => {
           />
         </FormControl>
         <FormControl fullWidth margin="normal">
-          <InputLabel shrink>Description du Produit</InputLabel>
+          <InputLabel shrink>Description </InputLabel>
           <TextField
             variant="outlined"
             fullWidth
@@ -234,8 +230,8 @@ const ProductForm: React.FC = () => {
             }}
           />
         </FormControl>
-        <FormControl fullWidth margin="normal">
-          <InputLabel shrink>Prix du Produit</InputLabel>
+        <FormControl fullWidth margin="normal"> 
+          <InputLabel shrink>Prix </InputLabel>
           <TextField
             type="number"
             variant="outlined"
@@ -245,20 +241,23 @@ const ProductForm: React.FC = () => {
             onChange={(e) => setProductPrice(parseFloat(e.target.value))}
             error={!!error && (!productPrice || productPrice <= 0)}
             helperText={!!error && (!productPrice || productPrice <= 0) && 'Le prix du produit doit être supérieur à 0.'}
-            sx={{
-              '& .MuiOutlinedInput-root': {
-                '&.Mui-focused fieldset': {
-                  borderColor: '#FF9A40',
-                },
-              },
-              '& .MuiOutlinedInput-input': {
-                backgroundColor: 'rgba(255, 154, 64, 0.05)',
-              },
-              '& .MuiInputLabel-root': {
-                paddingBottom: '5px',
-              },
-            }}
-          />
+            InputProps={{
+            endAdornment: <InputAdornment position="end">€</InputAdornment>, 
+          }}
+          sx={{
+          '& .MuiOutlinedInput-root': {
+          '&.Mui-focused fieldset': {
+            borderColor: '#FF9A40',
+          },
+          },
+          '& .MuiOutlinedInput-input': {
+          backgroundColor: 'rgba(255, 154, 64, 0.05)',
+          },
+          '& .MuiInputLabel-root': {
+          paddingBottom: '5px',
+          },
+         }}
+        />
         </FormControl>
         <FormControl fullWidth margin="normal">
           <InputLabel shrink>Catégorie</InputLabel>
@@ -321,12 +320,12 @@ const ProductForm: React.FC = () => {
               )}
             </div>
           </label>
-          {!!error && !photoURL && !photo && <Typography color="error">L'image du produit est obligatoire.</Typography>}
+          {!!error && !photoURL && !photo && <Typography color="error">L'image est obligatoire.</Typography>}
         </div>
         {error && <p className="error">{error}</p>}
         <div className="form-actions">
           <Button type="submit" variant="contained" color="primary">
-            {productId ? 'Modifier le Produit' : 'Ajouter le Produit'}
+            {productId ? 'Modifier' : 'Ajouter '}
           </Button>
         </div>
       </form>

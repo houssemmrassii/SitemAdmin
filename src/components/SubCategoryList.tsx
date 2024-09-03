@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 import './SubCategoryList.scss';
-import { Button, IconButton, Container, Typography } from '@mui/material';
+import { Button, IconButton, Container, Typography,Tooltip } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { Edit, Delete } from '@mui/icons-material';
 
@@ -16,7 +16,7 @@ interface Category {
   id: string;
   name: string;
 }
-
+ 
 interface GroupedCategories {
   categoryName: string;
   subCategories: SubCategory[];
@@ -87,12 +87,14 @@ const SubCategoryList: React.FC = () => {
   }
 
   return (
+    <div className='subcategory-list'>
     <Container>
-      <Typography variant="h4" gutterBottom>
-        Liste des Sous-Catégories
+    <Typography variant="h4" gutterBottom style={{ marginTop: '20px' }}>
+      Liste des Sous-Catégories
       </Typography>
       <div className="sub-category-table-container">
         <div className='sub'>
+        <Tooltip className='custom-tooltip' title="Ajouter une nouvelle sous-categories" arrow>
           <Button
             id='exporter'
             variant="contained"
@@ -101,7 +103,9 @@ const SubCategoryList: React.FC = () => {
           >
             + Sous-Catégorie
           </Button>
+          </Tooltip>
         </div>
+        <div className="table-container">
         <table className="sub-category-table">
           <thead>
             <tr>
@@ -134,8 +138,10 @@ const SubCategoryList: React.FC = () => {
             ))}
           </tbody>
         </table>
+        </div>
       </div>
     </Container>
+    </div>
   );
 };
 

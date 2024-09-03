@@ -1,36 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Typography, Button, IconButton } from '@mui/material';
+import { Container, Typography, Button, IconButton,Tooltip } from '@mui/material';
 import { Visibility, Edit, Delete } from '@mui/icons-material';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
-import './SStyle.css'; // Import the CSS file
-
+import './SStyle.css'; 
+ 
 interface OrderItem {
   productName: string;
   quantity: number | null;
   productPrice: string;
   productImage: string;
 }
-
+ 
 interface Order {
   id: string;
   items: OrderItem[];
   totalPrice: string;
-  status?: string;  // Make status optional
+  status?: string;  
   createdAt: string;
   shippingAddress: string;
   paymentMethod: string;
 }
-
+ 
 const OrdersList: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [searchStatus, setSearchStatus] = useState<string>('');
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 10;
   const navigate = useNavigate();
-
+ 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -48,6 +50,7 @@ const OrdersList: React.FC = () => {
             paymentMethod: data.paymentMethod,
           };
         });
+        ordersList.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
         setOrders(ordersList);
         setFilteredOrders(ordersList);
       } catch (error) {
@@ -56,18 +59,19 @@ const OrdersList: React.FC = () => {
         setLoading(false);
       }
     };
-
+ 
     fetchOrders();
   }, []);
-
+ 
   useEffect(() => {
     setFilteredOrders(
-      orders.filter(order => 
+      orders.filter(order =>
         searchStatus === '' || (order.status && order.status.toLowerCase().includes(searchStatus.toLowerCase()))
       )
     );
+    setCurrentPage(1); // Reset to the first page on search
   }, [searchStatus, orders]);
-
+ 
   const getStatusColor = (status?: string) => {
     if (!status) return 'black';
     switch (status.toLowerCase()) {
@@ -81,7 +85,7 @@ const OrdersList: React.FC = () => {
         return 'black';
     }
   };
-
+ 
   const handleDelete = async (orderId: string) => {
     try {
       await deleteDoc(doc(db, 'command', orderId));
@@ -91,19 +95,81 @@ const OrdersList: React.FC = () => {
       setError('Échec de la suppression de la commande');
     }
   };
-
+ 
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+ 
+  // Pagination Logic
+  const indexOfLastOrder = currentPage * itemsPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - itemsPerPage;
+  const currentOrders = filteredOrders.slice(indexOfFirstOrder, indexOfLastOrder);
+  const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
+ 
+  const renderPagination = () => {
+    const paginationItems = [];
+ 
+    if (totalPages <= 1) return null;
+ 
+    // First page
+    paginationItems.push(
+      <IconButton
+        key={1}
+        className={`pagination-button ${currentPage === 1 ? 'active' : ''}`}
+        onClick={() => paginate(1)}
+      >
+        1
+      </IconButton>
+    );
+ 
+    if (currentPage > 3) {
+      paginationItems.push(<span key="start-ellipsis">...</span>);
+    }
+ 
+    // Pages around the current page
+    for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
+      paginationItems.push(
+        <IconButton
+          key={i}
+          className={`pagination-button ${currentPage === i ? 'active' : ''}`}
+          onClick={() => paginate(i)}
+        >
+          {i}
+        </IconButton>
+      );
+    }
+ 
+    if (currentPage < totalPages - 2) {
+      paginationItems.push(<span key="end-ellipsis">...</span>);
+    }
+ 
+    // Last page
+    if (totalPages > 1) {
+      paginationItems.push(
+        <IconButton
+          key={totalPages}
+          className={`pagination-button ${currentPage === totalPages ? 'active' : ''}`}
+          onClick={() => paginate(totalPages)}
+        >
+          {totalPages}
+        </IconButton>
+      );
+    }
+ 
+    return paginationItems;
+  };
+ 
   if (loading) {
     return <Typography>Chargement...</Typography>;
   }
-
+ 
   if (error) {
     return <Typography color="error">{error}</Typography>;
   }
-
+ 
   return (
+    <div className='order-list'>
     <Container>
-      <Typography variant="h4" gutterBottom>
-        Liste des Commandes
+      <Typography variant="h4" gutterBottom style={{ marginTop: '20px' }}>
+        Liste des commandes
       </Typography>
       <div className="search-export-container">
         <form className="form-search" onSubmit={(e) => e.preventDefault()}>
@@ -123,59 +189,70 @@ const OrdersList: React.FC = () => {
             </button>
           </div>
         </form>
-        <Button id='exporter' variant="contained" className="export-button">
-          <i className="icon-file-text"></i>Exporter commandes
-        </Button>
+        <Tooltip className='custom-tooltip' title="Exporter la liste des commandes en pdf" arrow>
+        <Button id='exporter' variant="contained" className="export-button"> PDF </Button>
+        </Tooltip>
       </div>
       <div className="table-container">
-  <table className='order-table'>
-    <thead>
-      <tr>
-        <th>ID Commande</th>
-        <th>Prix</th>
-        <th>Quantité</th>
-        <th>Paiement</th>
-        <th>Statut</th>
-        <th>Suivi</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      {filteredOrders.map((order, index) => (
-        <tr key={order.id} className={index % 2 === 0 ? 'even-row' : 'odd-row'}>
-          <td>{order.id}</td>
-          <td>{order.totalPrice} €</td>
-          <td>{order.items.reduce((sum, item) => sum + (item.quantity || 0), 0)}</td>
-          <td>{order.paymentMethod}</td>
-          <td style={{ color: getStatusColor(order.status) }}>{order.status || 'En attente'}</td>
-          <td>
-            <Button id='exporter' variant="outlined" className="tracking-button">Suivi</Button>
-          </td>
-          <td>
-            <IconButton className="action-buttonS" onClick={() => navigate(`/orders/${order.id}`)}>
-              <Visibility />
-            </IconButton>
-            <IconButton className="action-buttonS">
-              <Edit />
-            </IconButton>
-            <IconButton className="action-buttonS delete-button" onClick={() => handleDelete(order.id)}>
-              <Delete />
-            </IconButton>
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</div> 
+        <table className='order-table'>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Prix</th>
+              <th>Quantité</th>
+              <th>Paiement</th>
+              <th>Statut</th>
+              <th>Suivi</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentOrders.map((order, index) => (
+              <tr key={order.id} className={index % 2 === 0 ? 'even-row' : 'odd-row'}>
+                <td>{order.id}</td>
+                <td>{order.totalPrice} €</td>
+                <td>{order.items.reduce((sum, item) => sum + (item.quantity || 0), 0)}</td>
+                <td>{order.paymentMethod}</td>
+                <td style={{ color: getStatusColor(order.status) }}>{order.status || 'En attente'}</td>
+                <td>
+                  <Button id='exporter' variant="outlined" className="tracking-button">Suivi</Button>
+                </td>
+                <td>
+                  <IconButton className="action-buttonS" onClick={() => navigate(`/orders/${order.id}`)}>
+                    <Visibility />
+                  </IconButton>
+                  <IconButton className="action-buttonS">
+                    <Edit />
+                  </IconButton>
+                  <IconButton className="action-buttonS delete-button" onClick={() => handleDelete(order.id)}>
+                    <Delete />
+                  </IconButton>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <div className="pagination-container">
-        <IconButton className="pagination-button">&lt;</IconButton>
-        <IconButton className="pagination-button active">1</IconButton>
-        <IconButton className="pagination-button">2</IconButton>
-        <IconButton className="pagination-button">3</IconButton>
-        <IconButton className="pagination-button">&gt;</IconButton>
+        <IconButton
+          className="pagination-button"
+          onClick={() => paginate(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          &lt;
+        </IconButton>
+        {renderPagination()}
+        <IconButton
+          className="pagination-button"
+          onClick={() => paginate(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          &gt;
+        </IconButton>
       </div>
     </Container>
+    </div>
   );
 };
-
+ 
 export default OrdersList;

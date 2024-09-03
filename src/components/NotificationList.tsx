@@ -70,6 +70,7 @@ const NotificationList: React.FC = () => {
   };
 
   return (
+    <div className='notif'>
     <Container>
       <Typography variant="h4" gutterBottom>
         Notifications
@@ -126,6 +127,7 @@ const NotificationList: React.FC = () => {
         </IconButton>
       </div>
     </Container>
+    </div>
   );
 };
 

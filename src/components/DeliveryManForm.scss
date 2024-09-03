@@ -96,3 +96,38 @@
 .form-control input{
   outline: none;
 }
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
+  color: #333;
+}
+
+.time-picker-input {
+  width: 100%;
+}
+
+.time-picker-input-field {
+  &:hover {
+    border-color: #FF9A40;
+  }
+}
+
+.dropzone-area {
+  border: 2px dashed #FF9A40;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.submit-button {
+  background-color: #FF9A40;
+  color: white;
+  &:hover {
+    background-color: #e68933;
+  }
+}

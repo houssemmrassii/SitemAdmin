@@ -25,6 +25,11 @@ import ClientList from './components/clients';
 import EditProduct from './components/EditProduct';
 import EditSubCategory from './components/EditSubCategory';
 import NotificationList from './components/NotificationList';
+import RestaurantList from './components/RestaurantList';
+import RestaurantForm from './components/RestaurantForm';
+import TestInvoice from './components/TestInvoice';
+import ReviewsList from './components/ReviewsList';
+import DeliveryManCommands from './components/DeliveryManCommands';
 
 const App: React.FC = () => {
   useEffect(() => {
@@ -60,18 +65,18 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<MainLayout />}>
-          <Route index element={<HomePage />} />
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="orders" element={<OrdersList />} />
-          <Route path="orders/:orderId" element={<OrderDetails />} />
-          <Route path="delivery-men" element={<DeliveryMenList />} />
-          <Route path="delivery-men/new" element={<DeliveryManForm />} />
-          <Route path="delivery-men/edit/:deliveryManId" element={<UpdateDeliveryManForm />} />
-          <Route path="categories" element={<CategoryList />} />
-          <Route path="categories/new" element={<AddCategory />} />
-          <Route path="products" element={<ProductList />} />
-          <Route path="/products/:productId" element={<EditProduct />} />
-          <Route path="products/new" element={<ProductForm />} />
+        <Route index element={<HomePage />} />
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="orders" element={<OrdersList />} />
+        <Route path="orders/:orderId" element={<OrderDetails />} />
+        <Route path="delivery-men" element={<DeliveryMenList />} />
+        <Route path="delivery-men/new" element={<DeliveryManForm />} />
+        <Route path="delivery-men/edit/:deliveryManId" element={<UpdateDeliveryManForm />} />
+        <Route path="categories" element={<CategoryList />} />
+        <Route path="categories/new" element={<AddCategory />} />
+        <Route path="products" element={<ProductList />} />
+        <Route path="/products/:productId" element={<EditProduct />} />
+        <Route path="products/new" element={<ProductForm />} />
           <Route path="/subcategories" element={<SubCategoryList />} />
           <Route path="subcategories/new" element={<AddSubCategory />} />
           <Route path="subcategories/edit/:id" element={<EditSubCategory />} />
@@ -81,8 +86,12 @@ const App: React.FC = () => {
           <Route path="/ClientList" element={<ClientList />} />
           <Route path="/Notification" element={<NotificationList />} />
 
-
-
+          <Route path="/restaurants/edit/:id" element={<RestaurantForm />} /> 
+          <Route path="/restaurants" element={<RestaurantList />} />
+        <Route path="/restaurants/new" element={<RestaurantForm />} />
+        <Route path="/test" element={<TestInvoice />} />
+        <Route path="/ReviewsList/:productId" element={<ReviewsList  />} />
+        <Route path="/delivery-men/:deliveryManId" element={<DeliveryManCommands />} />
 
         </Route>
       </Routes>

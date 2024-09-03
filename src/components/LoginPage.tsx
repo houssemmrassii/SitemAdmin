@@ -34,7 +34,7 @@ const LoginPage: React.FC = () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       console.log('User logged in successfully:', userCredential.user);
-      navigate('/home'); // Redirect to home page on successful login
+      navigate('/dashboard'); // Redirect to home page on successful login
     } catch (error: any) {
       setError(error.message || 'Failed to log in. Please try again.');
     }

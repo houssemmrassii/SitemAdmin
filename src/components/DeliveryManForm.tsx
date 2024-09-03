@@ -36,7 +36,7 @@ const DeliveryManForm: React.FC = () => {
   };
 
   const validatePhoneNumber = (phoneNumber: string) => {
-    const phoneRegex = /^\+?[1-9]\d{1,14}$/;  // Validates international phone numbers
+    const phoneRegex = /^\+?[1-9]\d{1,14}$/;  
     return phoneRegex.test(phoneNumber);
   };
 
@@ -77,8 +77,6 @@ const DeliveryManForm: React.FC = () => {
         phoneNumber,
         photo: photoURL,
       });
-
-      // Envoi d'un email au livreur
       await sendEmail(email, name);
 
       toast.success('Livreur ajouté avec succès!', {
@@ -108,8 +106,8 @@ const DeliveryManForm: React.FC = () => {
       <ToastContainer />
       <form onSubmit={handleSubmit}>
       <div className="form-group">
-  <label>Email</label>
-  <input
+        <label>Email</label>
+        <input
     type="email"
     className={`form-control ${!!error && !validateEmail(email) ? 'error' : ''}`}
     value={email}

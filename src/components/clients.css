@@ -12,13 +12,22 @@
     background-color: #FF9A40;
   color: white;
   }
-
+  h3{
+    margin: 0;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-weight: 400;
+    font-size: 2.125rem;
+    line-height: 1.235;
+    letter-spacing: 0.00735em;
+    margin-bottom: 0.35em;
+    margin-top: 20px;
+  }
   .icon-blocked {
     color: red;
   }
   
   .icon-unblocked {
-    color: #FF965A; /* Couleur orange */
+    color: #FF965A; 
   }
 
   svg{
@@ -28,5 +37,28 @@
     table-layout: auto;
 
   }
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; 
+}
 
+.table-container table {
+    width: 100%; 
+    min-width: 800px; 
+    border-collapse: collapse;
+}
+@media (max-width: 768px) {
+  .table-container {
+      padding-bottom: 1rem;
+      overflow-x: scroll;
+  }
+
+  .table-container table {
+      width: auto; /* Permet à la table de s'ajuster à son contenu */
+  }
+  .client-list{
+    max-width: 400px;
+  }
+}
   

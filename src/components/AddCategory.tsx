@@ -108,11 +108,11 @@ const AddCategory: React.FC = () => {
     <Container className="category-form">
       <ToastContainer />
       <Typography variant="h4" gutterBottom>
-        {id ? 'Modifier la Catégorie' : 'Ajouter une Catégorie'}
+        {id ? 'Modifier la catégorie' : 'Ajouter une catégorie'}
       </Typography>
       <form onSubmit={handleSubmit}>
         <FormControl fullWidth margin="normal">
-          <InputLabel shrink>Nom de la Catégorie</InputLabel>
+          <InputLabel shrink>Nom</InputLabel>
           <TextField
             variant="outlined"
             fullWidth
@@ -158,7 +158,7 @@ const AddCategory: React.FC = () => {
         {error && <p className="error">{error}</p>}
         <div className="form-actions">
           <Button type="submit" variant="contained" color="primary" className="submit-button">
-            {id ? 'Mettre à jour la Catégorie' : 'Ajouter la Catégorie'}
+            {id ? 'Mettre à jour' : 'Ajouter '}
           </Button>
         </div>
       </form>

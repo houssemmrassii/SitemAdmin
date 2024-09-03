@@ -54,7 +54,7 @@ const AddSubCategory: React.FC = () => {
   return (
     <Container className="add-subcategory-form">
       <Typography variant="h4" gutterBottom>
-        Ajouter une Sous-Catégorie
+        Ajouter une sous-catégorie
       </Typography>
       <form onSubmit={handleSubmit}>
         <FormControl fullWidth margin="normal" sx={{ paddingBottom: '10px' }}>
@@ -74,14 +74,14 @@ const AddSubCategory: React.FC = () => {
             }}
           >
             {categories.map(category => (
-              <MenuItem key={category.id} value={category.id}>
+              <MenuItem key={category.id} value={category.id} style={{fontSize: '13px' }}>
                 {category.name}
               </MenuItem>
             ))}
           </Select>
         </FormControl>
         <FormControl fullWidth margin="normal" sx={{ paddingBottom: '10px' }}>
-          <InputLabel shrink>Nom de la Sous-Catégorie</InputLabel>
+          <InputLabel shrink>Nom </InputLabel>
           <TextField
             variant="outlined"
             value={subCategoryName}
@@ -104,7 +104,7 @@ const AddSubCategory: React.FC = () => {
         </FormControl>
         <div className="form-actions">
           <Button type="submit" variant="contained" color="primary">
-            Ajouter la Sous-Catégorie
+            Ajouter 
           </Button>
         </div>
         {error && <Typography color="error" className="error">{error}</Typography>}

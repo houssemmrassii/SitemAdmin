@@ -25,7 +25,7 @@
     background-color: #f1f1f1;
   }
   td{
-    font-size: 15px;
+    font-size: 16px;
   }
   table tr:nth-child(odd) {
     background-color: #ffffffe6;
@@ -41,7 +41,6 @@
   }
 }
 .sub{
-  margin-bottom: 20px;
   text-align: end;
 }
  
@@ -54,4 +53,32 @@
     text-align: left;
     font-weight: bold;
     font-size: 16px;
+}
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; 
+}
+
+.table-container table {
+  width: 100%; 
+  min-width: 800px; 
+  border-collapse: collapse;
+}
+
+@media (max-width: 768px) {
+  .SubCtagory-list-container {
+    max-width: 400px;}
+
+  .subcategory-list{
+    max-width: 400px;
+  }
+  .table-container {
+      padding-bottom: 1rem;
+      overflow-x: scroll;
+  }
+
+  .table-container table {
+      width: auto; 
+  }
 }

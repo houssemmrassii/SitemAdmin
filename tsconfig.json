@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "target": "ES5",
+    "target": "ES6", // Target ES6 instead of ES5
     "lib": [
       "dom",
       "dom.iterable",
+      "es6", // Include ES6 library for modern JavaScript features
       "esnext"
     ],
     "allowJs": true,

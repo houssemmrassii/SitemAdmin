@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { collection, getDocs, deleteDoc, doc, updateDoc } from 'firebase/firestore';
-import { Container, Typography, Button, IconButton, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
-import { Visibility, Lock, LockOpen } from '@mui/icons-material';
+import { Container, Typography, Button, IconButton, Dialog,Tooltip, DialogTitle, DialogContent, DialogActions, List, ListItem, ListItemAvatar, ListItemText, Avatar } from '@mui/material';
+import { Visibility, Lock, LockOpen } from '@mui/icons-material'; 
 import { getAuth, deleteUser } from 'firebase/auth';
 import { db } from '../firebaseConfig';
 import './DeliveryMenList.css';
 import './clients.css';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-
+ 
 interface OrderItem {
   productCategory: string;
   productDescription: string;
@@ -19,7 +19,7 @@ interface OrderItem {
   productSpecCategory: string;
   quantity: number;
 }
-
+ 
 interface Order {
   deliveryAddress: string;
   deliveryCost: number;
@@ -33,7 +33,7 @@ interface Order {
   total: number;
   date: string;
 }
-
+ 
 interface Client {
   id: string;
   email: string;
@@ -42,34 +42,39 @@ interface Client {
   phoneNumber: number;
   uid: string;
   blocked: boolean;
-  historiqueCommandes: Order[]; 
+  historiqueCommandes: Order[];
 }
-
+ 
 const OrderHistory: React.FC<{ historiqueCommandes: Order[] }> = ({ historiqueCommandes }) => (
   <div className="order-history">
     {historiqueCommandes.length === 0 ? (
       <Typography>Aucune commande trouvée.</Typography>
     ) : (
       historiqueCommandes.map(order => (
-        <div key={order.id} className="order-item">
-          <Typography variant="h6">ID de Commande: {order.id}</Typography>
-          <Typography>Date: {order.date}</Typography>
+        <div key={order.id} className="order-item" style={{ marginBottom: '20px', padding: '10px', borderRadius: '8px', border: '1px solid #ddd', backgroundColor: '#f9f9f9' }}>
+          <Typography variant="h6" style={{ marginBottom: '10px' }}>ID de Commande: {order.id}</Typography>
+          <Typography>Date: {new Date(order.date).toLocaleDateString('fr-FR')} {new Date(order.date).toLocaleTimeString('fr-FR')}</Typography>
           <Typography>Total: {order.total.toFixed(2)} €</Typography>
-          <Typography>Articles:</Typography>
-          <ul>
+          <Typography style={{ marginTop: '10px' }}>Articles:</Typography>
+          <List>
             {order.items.map(item => (
-              <li key={item.productId}>
-                <img src={item.productImage} alt={item.productName} width="50" />
-                {item.productName} - {item.productPrice.toFixed(2)} € x {item.quantity}
-              </li>
+              <ListItem key={item.productId} style={{ padding: '8px 0' }}>
+                <ListItemAvatar>
+                  <Avatar variant="square" src={item.productImage} alt={item.productName} style={{ width: '60px', height: '60px', marginRight: '10px' }} />
+                </ListItemAvatar>
+                <ListItemText
+                  primary={item.productName}
+                  secondary={`${item.productPrice.toFixed(2)} € x ${item.quantity}`}
+                />
+              </ListItem>
             ))}
-          </ul>
+          </List>
         </div>
       ))
     )}
   </div>
 );
-
+ 
 const ClientList: React.FC = () => {
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -77,8 +82,10 @@ const ClientList: React.FC = () => {
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
   const [selectedClientOrders, setSelectedClientOrders] = useState<Order[]>([]);
   const [showHistory, setShowHistory] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1); // For pagination
+  const itemsPerPage = 10; // Number of clients to show per page
   const navigate = useNavigate();
-
+ 
   useEffect(() => {
     const fetchClients = async () => {
       try {
@@ -96,15 +103,15 @@ const ClientList: React.FC = () => {
         setLoading(false);
       }
     };
-
+ 
     fetchClients();
   }, []);
-
+ 
   const handleBlock = async (id: string, blocked: boolean) => {
     try {
       const clientRef = doc(db, 'clients', id);
       await updateDoc(clientRef, { blocked: !blocked });
-
+ 
       // Update the client state locally
       setClients(clients.map(client =>
         client.id === id ? { ...client, blocked: !blocked } : client
@@ -114,21 +121,21 @@ const ClientList: React.FC = () => {
       alert('Échec de la mise à jour du statut du client.');
     }
   };
-
+ 
   const handleDelete = async (id: string, uid: string) => {
     try {
       const auth = getAuth();
       const user = auth.currentUser;
-
+ 
       // Delete the client document from Firestore
       await deleteDoc(doc(db, 'clients', id));
-
+ 
       // If current user is being deleted, sign out
       if (user && user.uid === uid) {
         await deleteUser(user);
         await auth.signOut();
       }
-
+ 
       // Remove the client from the local state
       setClients(clients.filter(client => client.id !== id));
     } catch (error) {
@@ -142,7 +149,7 @@ const ClientList: React.FC = () => {
       alert(errorMessage);
     }
   };
-
+ 
   const handleShowHistory = (clientId: string) => {
     const client = clients.find(c => c.id === clientId);
     if (client) {
@@ -152,19 +159,27 @@ const ClientList: React.FC = () => {
     }
   };
 
+  const indexOfLastClient = currentPage * itemsPerPage;
+  const indexOfFirstClient = indexOfLastClient - itemsPerPage;
+  const currentClients = clients.slice(indexOfFirstClient, indexOfLastClient);
+ 
+  const totalPages = Math.ceil(clients.length / itemsPerPage);
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+ 
   if (loading) {
     return <Typography>Chargement...</Typography>;
   }
-
+ 
   if (error) {
     return <Typography color="error">{error}</Typography>;
   }
-
-  // Sort clients: unblocked first, then blocked
+ 
   const sortedClients = [...clients].sort((a, b) => (a.blocked === b.blocked ? 0 : a.blocked ? 1 : -1));
-
+ 
   return (
+    <div className='client-list'>
     <Container>
+    <h3>Liste des clients</h3>
       <div className="search-export-container">
         <form className="form-search" onSubmit={(e) => e.preventDefault()}>
           <fieldset className="name">
@@ -179,47 +194,46 @@ const ClientList: React.FC = () => {
             <button type="submit" className="search-button">
               <i className="icon-search"></i>
             </button>
-          </div>
+          </div> 
         </form>
-        <Button
+        <Tooltip className='custom-tooltip' title="Exporter la liste des clients en pdf" arrow>
+          <Button
           id='exporter'
           variant="contained"
           className="export-button"
-          onClick={() => navigate('/')}
-          startIcon={<PictureAsPdfIcon />}>
-          Exporter PDF
+          onClick={() => navigate('/')} >
+          PDF
         </Button>
+       </Tooltip> 
       </div>
       <div className="table-container">
         <table id='tab' className='delivery-men-table'>
           <thead>
             <tr className="table-title">
-              <th>ID</th>
               <th>Nom</th>
               <th>Mail</th>
-              <th>Numéro Téléphone</th>
-              <th>Statut</th> {/* New column */}
-              <th></th>
+              <th>Téléphone</th>
+              <th>Statut</th>
+              <th>Historique</th> 
             </tr>
           </thead>
           <tbody>
-            {sortedClients.map((client, index) => (
+            {currentClients.map((client, index) => (
               <tr key={client.id} className={index % 2 === 0 ? 'even-row' : 'odd-row'}>
-                <td>{client.id}</td>
                 <td>{client.name}</td>
                 <td>{client.email}</td>
                 <td>{client.phoneNumber}</td>
                 <td>
                 <IconButton
                   onClick={() => handleBlock(client.id, client.blocked)}
-                  style={{ color: client.blocked ? 'red' : '#FF965A', fontSize: '40px' }} // Adjusted size here
+                  style={{ color: client.blocked ? 'red' : '#FF965A', fontSize: '20px' }} 
                 >
-                  {client.blocked ? <Lock style={{ fontSize: 'inherit !important' }} /> : <LockOpen style={{ fontSize: 'inherit !important' }} />}
+                  {client.blocked ? <Lock style={{ fontSize: '20px' }} /> : <LockOpen style={{ fontSize: '20px' }} />}
                 </IconButton>
                 </td>
                 <td>
                   <IconButton className="action-button" onClick={() => handleShowHistory(client.id)}>
-                    Historique
+                    <Visibility />
                   </IconButton>
                 </td>
               </tr>
@@ -229,34 +243,56 @@ const ClientList: React.FC = () => {
       </div>
 
       <div className="pagination-container">
-        <IconButton className="pagination-button">&lt;</IconButton>
-        <IconButton className="pagination-button active">1</IconButton>
-        <IconButton className="pagination-button">2</IconButton>
-        <IconButton className="pagination-button">3</IconButton>
-        <IconButton className="pagination-button">&gt;</IconButton>
+        <IconButton
+          className="pagination-button"
+          onClick={() => paginate(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          &lt;
+        </IconButton>
+        {[...Array(totalPages)].map((_, index) => (
+          <IconButton
+            key={index + 1}
+            className={`pagination-button ${currentPage === index + 1 ? 'active' : ''}`}
+            onClick={() => paginate(index + 1)}
+          >
+            {index + 1}
+          </IconButton>
+        ))}
+        <IconButton
+          className="pagination-button"
+          onClick={() => paginate(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          &gt;
+        </IconButton>
       </div>
+ 
       <Dialog
         open={showHistory}
         onClose={() => setShowHistory(false)}
         PaperProps={{
           style: {
-            width: '40vw',
+            width: '50vw',
             maxWidth: 'none',
+            padding: '20px',
+            borderRadius: '10px', 
           },
         }}
       >
-        <DialogTitle>Historique des Commandes</DialogTitle>
+        <DialogTitle style={{ textAlign: 'center', fontWeight: 'bold' }}>Historique des Commandes</DialogTitle>
         <DialogContent>
           <OrderHistory historiqueCommandes={selectedClientOrders} />
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setShowHistory(false)} color="primary">
+        <DialogActions style={{ justifyContent: 'center' }}>
+          <Button onClick={() => setShowHistory(false)} variant="contained" style={{ backgroundColor: '#FF965A', color: 'white' }}>
             Fermer
           </Button>
         </DialogActions>
       </Dialog>
     </Container>
+    </div>
   );
 };
-
+ 
 export default ClientList;

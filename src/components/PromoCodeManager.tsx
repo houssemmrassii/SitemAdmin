@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 import './PromoCodeManager.css';
-import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { FaEdit, FaTrash } from 'react-icons/fa';
-import { Container, Typography, Button, IconButton } from '@mui/material';
-
+import { Edit, Delete } from '@mui/icons-material';
+import { Container, Typography, Button, IconButton, Tooltip} from '@mui/material';
 
 type PromoCode = {
     appellation: string;
     code: string;
-    createdAt: string;
+    createdAt: Date;
     discount: number;
     finishedAt: string;
     id: string;
@@ -19,151 +17,124 @@ type PromoCode = {
     tag: string;
     users: string[];
 };
-
+ 
 const PromoCodeManager: React.FC = () => {
   const [promoCodes, setPromoCodes] = useState<PromoCode[]>([]);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [currentPromoId, setCurrentPromoId] = useState<string | null>(null);
-  const [promoData, setPromoData] = useState<Partial<PromoCode>>({
-    appellation: '',
-    code: '',
-    createdAt: '',
-    discount: 0,
-    finishedAt: '',
-    nbruser: 0,
-    tag: '',
-    users: []
-  });
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  const navigate = useNavigate();
+ 
   useEffect(() => {
-    const fetchPromoCodes = async () => {
-      const promoCodeCollection = collection(db, 'promoCode');
-      const promoCodeSnapshot = await getDocs(promoCodeCollection);
-      const promoCodeList = promoCodeSnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as PromoCode[];
-      setPromoCodes(promoCodeList);
-    };
-
     fetchPromoCodes();
   }, []);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setPromoData({ ...promoData, [name]: value });
+ 
+  const fetchPromoCodes = async () => {
+    const promoCodeCollection = collection(db, 'promoCode');
+    const promoCodeSnapshot = await getDocs(promoCodeCollection);
+    const promoCodeList = promoCodeSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+      createdAt: new Date(doc.data().createdAt) // Convert to Date object
+    })) as PromoCode[];
+ 
+    // Sort promo codes by creation date (most recent first)
+    setPromoCodes(promoCodeList.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()));
   };
-
-  const validateDate = (date: string): boolean => {
-    const regex = /^\d{2}\/\d{2}\/\d{4}$/;
-    return regex.test(date);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const { createdAt, finishedAt } = promoData;
-
-    if (!validateDate(createdAt as string) || !validateDate(finishedAt as string)) {
-      alert('Veuillez entrer une date valide au format JJ/MM/AAAA.');
-      return;
-    }
-
-    if (isEditing && currentPromoId) {
-      const promoDocRef = doc(db, 'promoCode', currentPromoId);
-      await updateDoc(promoDocRef, promoData as PromoCode);
-      alert('Code promo mis à jour avec succès');
-    } else {
-      await addDoc(collection(db, 'promoCode'), promoData);
-      alert('Code promo ajouté avec succès');
-    }
-
-    setPromoData({
-      appellation: '',
-      code: '',
-      createdAt: '',
-      discount: 0,
-      finishedAt: '',
-      nbruser: 0,
-      tag: '',
-      users: []
-    });
-    setIsEditing(false);
-    setCurrentPromoId(null);
-    const fetchPromoCodes = async () => {
-      const promoCodeCollection = collection(db, 'promoCode');
-      const promoCodeSnapshot = await getDocs(promoCodeCollection);
-      const promoCodeList = promoCodeSnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as PromoCode[];
-      setPromoCodes(promoCodeList);
-    };
-    fetchPromoCodes();
-  };
-  const navigate = useNavigate();
-  const handleEdit = (promo: PromoCode) => {
-    setIsEditing(true);
-    setCurrentPromoId(promo.id);
-    setPromoData(promo);
-    navigate('/AjoutPromoCode', { state: { promo } });
-};
-
+ 
   const handleDelete = async (id: string) => {
     const promoDocRef = doc(db, 'promoCode', id);
     await deleteDoc(promoDocRef);
     alert('Code promo supprimé avec succès');
     setPromoCodes(promoCodes.filter(promo => promo.id !== id));
   };
-
+ 
+  const handleEdit = (promo: PromoCode) => {
+    navigate('/AjoutPromoCode', { state: { promo } });
+  };
+ 
+  // Pagination Logic
+  const indexOfLastPromo = currentPage * itemsPerPage;
+  const indexOfFirstPromo = indexOfLastPromo - itemsPerPage;
+  const currentPromos = promoCodes.slice(indexOfFirstPromo, indexOfLastPromo);
+ 
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+ 
   return (
     <div className="promo-code-manager">
-        <div>
-        <h3>Codes promo</h3>
-        <Link to="/AjoutPromoCode"><a className='Ajouter'><button className='ajouter'> + &nbsp;  Ajouter CodePromo </button> </a></Link>
+        <h3>Liste des codes promo</h3>
+        <div className="search-export-container">
+        <form className="form-search" onSubmit={(e) => e.preventDefault()}>
+          <fieldset className="name">
+            <input
+              type="text"
+              placeholder="Rechercher ici..."
+              className="search-input"
+              name="name"
+            />
+          </fieldset>
+          <div className="button-submit">
+            <button type="submit" className="search-button">
+              <i className="icon-search"></i>
+            </button>
+          </div> 
+        </form>
+        <div className="add-buttons">
+        <Tooltip className='custom-tooltip' title="Ajouter un nouveau code promo" arrow>
+        <Button
+          id="exporter"
+          variant="contained"
+          className="add-button"
+          onClick={() => navigate('/AjoutPromoCode')}
+        > Ajouter </Button>
+        </Tooltip>
         </div>
-        <div className='table-container'>
-      <table className="promo-table">
-        <thead>
-          <tr>
-            <th>Appellation</th>
-            <th>Code</th>
-            <th>Date de création</th>
-            <th>Remise</th>
-            <th>Date d'expiration</th>
-            <th>Utilisateurs</th>
-            <th>Tag</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {promoCodes.map(promo => (
-            <tr key={promo.id}>
-              <td>{promo.appellation}</td>
-              <td>{promo.code}</td>
-              <td>{promo.createdAt}</td>
-              <td>{promo.discount} %</td>
-              <td>{promo.finishedAt}</td>
-              <td>{promo.nbruser}</td>
-              <td>{promo.tag}</td>
-              <td>
-                <FaEdit onClick={() => handleEdit(promo) } className="promo-edit"  />
-                <FaTrash onClick={() => handleDelete(promo.id)} className="promo-delete" />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
       </div>
-    <div className="pagination-container">
-    <IconButton className="pagination-button">&lt;</IconButton>
-    <IconButton className="pagination-button active">1</IconButton>
-    <IconButton className="pagination-button">2</IconButton>
-    <IconButton className="pagination-button">3</IconButton>
-    <IconButton className="pagination-button">&gt;</IconButton>
-  </div>
-  </div>
+      <div className="table-container">
+        <table className="promo-table">
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Date de création</th>
+              <th>Remise</th>
+              <th>Date d'expiration</th>
+              <th>Utilisateurs</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentPromos.map(promo => (
+              <tr key={promo.id}>
+                <td>{promo.code}</td>
+                <td>{promo.createdAt.toLocaleString('fr-FR')}</td>
+                <td>{promo.discount} %</td>
+                <td>{promo.finishedAt}</td>
+                <td>{promo.nbruser}</td>
+                <td>
+                  <IconButton onClick={() => handleEdit(promo)} className="promo-edit">
+                    <Edit />
+                  </IconButton>
+                  <IconButton onClick={() => handleDelete(promo.id)} className="promo-delete">
+                    <Delete />
+                  </IconButton>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="pagination-container">
+        {[...Array(Math.ceil(promoCodes.length / itemsPerPage)).keys()].map(number => (
+          <IconButton
+            key={number + 1}
+            className={`pagination-button ${currentPage === number + 1 ? 'active' : ''}`}
+            onClick={() => paginate(number + 1)}
+          >
+            {number + 1}
+          </IconButton>
+        ))}
+      </div>
+    </div>
   );
 };
-
+ 
 export default PromoCodeManager;

@@ -6,12 +6,20 @@ body {
   color: #333;
   margin-top: 40px;
 }
+h3{
+  margin: 0;
+  font-family: "Roboto","Helvetica","Arial",sans-serif;
+  font-weight: 400;
+  font-size: 2.125rem;
+  line-height: 1.235;
+  letter-spacing: 0.00735em;
+  margin-bottom: 0.35em;
+}
 
 .search-export-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
 }
 
 .form-search {
@@ -59,15 +67,12 @@ table, th, td {
 .delivery-men-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 40px;
   border: none;
 
 }
 
 .delivery-men-table th, .delivery-men-table td {
-  padding: 14px;
   text-align: center;
-  font-size: 14px;
 }
 
 .delivery-men-table th {
@@ -75,6 +80,10 @@ table, th, td {
   text-align: center;
   background-color: #FBF3EE;
   padding: 20px;
+}
+.delivery-man-photo{
+  max-width: 80px;
+  height: auto;
 }
 
 label {
@@ -92,16 +101,8 @@ label {
   text-align: center;
 }
 
-.action-button {
-  color: #FF9A40;
-}
-
 .action-button:hover {
   color: #FF9A40
-}
-
-.delete-button {
-  color: #FF4040;
 }
 
 .delete-button:hover {
@@ -120,7 +121,7 @@ label {
   margin: 0 5px;
   border-radius: 8px;
 }
-
+ 
 .pagination-button.active {
   background-color: #FF9A40;
   color: white;
@@ -146,5 +147,135 @@ color: white;
   margin-right: 10px;
 }
 
+.search-button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
 
+.search-input {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.buttons-container {
+  display: flex;
+  gap: 10px;
+}
+
+.add-button, .pdf-button {
+  color: #FF9A40;
+  border: 1px solid #FF9A40;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-button:hover, .pdf-button:hover {
+  background-color: #FF9A40;
+  color: white;
+}
+
+.delivery-men-table img.restaurant-logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; 
+  margin-top: 10px
+}
+
+.table-container table {
+  width: 100%; 
+  min-width: 800px;
+  border-collapse: collapse;
+}
+
+@media (max-width: 1024px) {
+  .delivery-men{
+    max-width: 400px;
+  }
+  .search-input {
+    width: 200px;
+  }
+
+  .delivery-men-table th, .delivery-men-table td {
+    padding: 10px;
+    font-size: 12px;
+  }
+  .table-container {
+    padding-bottom: 1rem;
+    overflow-x: scroll;
+}
+
+.table-container table {
+    width: auto; 
+}
+.add-buttons {
+  width: 100%;
+  justify-content: space-between;
+  padding: 8px 16px;
+  font-size: 10px;
+}
+#exporter{
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 16px;
+  transition: background-color 0.3s;
+}
+  
+  .pagination-button {
+    font-size: 12px;
+    padding: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .delivery-men{
+    max-width: 400px;
+  }
+  .search-export-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .form-search {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .search-input {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .delivery-men-table {
+    font-size: 12px;
+  }
+  
+  .delivery-men-table th, .delivery-men-table td {
+    padding: 8px;
+  }
+
+  .table-container {
+    padding-bottom: 1rem;
+    overflow-x: scroll;
+}
+
+.table-container table {
+    width: auto; 
+}
+
+  .pagination-button {
+    margin: 5px 0;
+  }
+}
 

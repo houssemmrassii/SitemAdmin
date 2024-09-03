@@ -1,12 +1,14 @@
 .promo-code-manager {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 20px;
   font: inherit;
   font-style: inherit;
   font-weight: inherit;
   font-family: "Inter", sans-serif;
 }
+@media (max-width: 768px) {
+  .promo-code-manager{
+    max-width: 400px;
+  }
+ }
 
 h2 {
   color: #333;
@@ -22,7 +24,13 @@ h2 {
 }
 
 h3{
-  padding-top: 20px;
+  margin: 0;
+  font-family: "Roboto","Helvetica","Arial",sans-serif;
+  font-weight: 400;
+  font-size: 2.125rem;
+  line-height: 1.235;
+  letter-spacing: 0.00735em;
+  margin-bottom: 0.35em;
 }
 
 .promo-form {
@@ -45,6 +53,10 @@ h3{
 }
 ::placeholder{
   color: #b8b7b7;
+}
+.add-buttons{
+  display: flex;
+  justify-content: flex-end;
 }
 .Ajouter{
   justify-content: right;
@@ -89,15 +101,27 @@ color: white;
 table, th, td {
   border: none;
   text-align: center;
+  font-size: 16px;
 }
+
 .table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; 
+}
+
+.table-container table {
+  width: 100%; /* Assurez-vous que la table utilise toute la largeur du conteneur */
+  min-width: 800px; /* Ajustez cette valeur en fonction de la taille minimum souhaitée pour la table */
+  border-collapse: collapse;
+}
+.table-container-promo {
   margin-top: 20px;
   background-color: #f9f9f9;
 }
 .promo-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 40px;
   border: none;
   table-layout: auto;
 }
@@ -148,14 +172,56 @@ input{
 outline: none;
 }
 table tr:nth-child(odd) {
-background-color: #ffffff;
+background-color: #f5f5f5;
 }
 table tr:nth-child(row) {
-background-color: #ffffffe6;
+background-color: #ffffff;
+}
+
+.promo-table td .promo-edit,
+.promo-table td .promo-delete {
+    color: #808080; 
+    cursor: pointer;
+    transition: color 0.3s ease-in-out;
+    font-size: 1.2em; 
+}
+
+.promo-table td .promo-edit:hover,
+.promo-table td .promo-delete:hover {
+    color: #FF9A40; 
+}
+
+.promo-table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.promo-table td .promo-edit,
+.promo-table td .promo-delete {
+    margin-right: 10px; 
+}
+
+.promo-table td .promo-delete {
+    margin-right: 0; 
+}
+
+.pagination-container .pagination-button.active {
+  background-color: #FF9A40; 
+  color: white;
 }
 
 .promo-table table td:nth-child(2),
 .promo-table table th:nth-child(2) {
   text-align: center;
   font-size: 12px;
+}
+@media (max-width: 768px) {
+  .table-container {
+      padding-bottom: 1rem;
+      overflow-x: scroll;
+  }
+
+  .table-container table {
+      width: auto; 
+  }
 }

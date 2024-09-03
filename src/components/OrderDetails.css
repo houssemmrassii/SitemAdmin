@@ -2,7 +2,7 @@
 
 body {
   font-family: 'Roboto', sans-serif;
-  background-color: #ffffff;
+  background-color: white;
   margin: 0;
   padding: 0;
   color: #333;
@@ -12,13 +12,13 @@ body {
   display: flex;
   justify-content: space-between;
   padding: 20px;
-  background-color: #ffffff;
+  background-color: white;
 }
 
 .section {
   padding: 20px;
   margin-bottom: 20px;
-  background-color: #fff;
+  background-color: white;
   border-radius: 8px;
 }
 
@@ -58,7 +58,15 @@ body {
   padding: 5px 10px;
   border-radius: 8px;
 }
-
+#exporter{
+  background-color: white;
+  color:#FF9A40;
+  border: 1px solid #FF9A40 ;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: none;
+}
 .status-pending {
   color: grey;
   background-color: #eceff1;
@@ -76,6 +84,7 @@ body {
     display: flex;
     justify-content: space-between;
     padding: 20px;
+    background-color: white;
   }
   
   .section {
@@ -99,7 +108,6 @@ body {
     align-items: center;
     margin-bottom: 10px;
   }
-  
 
 .status-cancel {
   color: red;
@@ -126,3 +134,8 @@ color: white;
 .order-table tr:nth-child(odd) {
   background-color: #ffffff;
 }
+.pagination-container {
+  display: flex;
+  align-items: center; 
+  justify-content: center; 
+  gap: 8px; }

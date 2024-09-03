@@ -55,10 +55,6 @@
     background-color: #FF9A40;
   }
   
-  .delete-button {
-    color: red;
-  }
-  
   .delete-button:hover {
     color: darkred;
   }
@@ -103,13 +99,11 @@
   .order-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 40px;
     border: none;
     table-layout: auto;
   }
   
   .order-table th, .order-table td {
-    padding: 14px;
     text-align: center;
     font-size: 14px;
   }
@@ -132,5 +126,111 @@
     width: 100%;
   }
   .order-table tr:nth-child(odd) {
-    background-color: #f9f9f9;
+    background-color: #f5f5f5;
   }
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; 
+  }
+  
+  .order-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .table-container{
+    margin-top: 10px
+  }
+
+  @media (max-width: 768px) {
+    .notif .container{
+      max-width: 400px;
+    }
+    .order-list{
+      max-width: 400px;
+    }
+    .search-export-container {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    #order .search-export-container {
+      flex-direction: row;
+      align-items: flex-start;
+      display: flex;
+      gap: 10px;
+  }
+  
+    .export-button {
+      margin-left: 0;
+      width: 100%; 
+    }
+  
+    .form-search {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  
+    .search-input {
+      margin-right: 0;
+    }
+    
+    .order-table th, .order-table td {
+      padding: 8px;
+    }
+  
+    .table-wrapper {
+      margin-bottom: 15px;
+    }
+  
+    .pagination-container {
+      margin-top: 10px;
+    }
+    .add-buttons {
+      width: 100%;
+      justify-content: space-between;
+      padding: 8px 16px;
+      font-size: 10px;
+    }
+    #exporter{
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 8px 16px;
+      transition: background-color 0.3s;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .notif .container{
+      max-width: 400px;
+    }
+    .order-list{
+      max-width: 400px;
+    }
+    .order-table th, .order-table td {
+      padding: 6px;
+    }
+  
+    .pagination-button {
+      padding: 4px;
+      font-size: 12px;
+    }
+  
+    .export-button {
+      padding: 8px;
+      font-size: 14px;
+    }
+    .add-buttons {
+      width: 100%;
+      justify-content: space-between;
+      padding: 8px 16px;
+      font-size: 10px;
+    }
+    #exporter{
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 8px 16px;
+      transition: background-color 0.3s;
+    }
+  }
+  
